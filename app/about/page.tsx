@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { ArrowRight, CheckCircle, Users, Target, Lightbulb, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { FaEmber, FaEnvelope, FaLinkedin, FaMailBulk, FaMailchimp, FaTwitter } from "react-icons/fa"
 
 export default function AboutPage() {
   const fadeInUp = {
@@ -73,6 +74,32 @@ export default function AboutPage() {
       icon: <Target className="h-10 w-10 text-primary" />,
     },
   ]
+  const founders = [
+    {
+      name: "Roma Devadhar",
+      role: "Co-Founder & CEO",
+      image: "/founder-1.png",
+      message:
+        "When we started Lynk Digital, we had a clear vision: to create a digital agency that truly understands the evolving needs of modern businesses. With over 15 years in the tech industry, I've witnessed firsthand how the right digital strategy can transform a company's trajectory. At Lynk Digital, we don't just build websites or run campaigns – we create digital experiences that connect brands with their audiences in meaningful ways. Our approach combines technical expertise with creative innovation, always keeping our clients' business objectives at the center of everything we do.",
+      socialLinks: [
+        { icon: <FaLinkedin className="h-4 w-4" />, url: "#" },
+        { icon: <FaTwitter className="h-4 w-4" />, url: "#" },
+        { icon: <FaEnvelope className="h-4 w-4" />, url: "#" },
+      ],
+    },
+    {
+      name: "Swarada Mhetre",
+      role: "Co-Founder & Creative Director",
+      image: "/placeholder.svg?height=200&width=200",
+      message:
+        "The digital landscape is constantly evolving, and with it, the expectations of users. My background in design and user experience has taught me that beautiful aesthetics must be paired with intuitive functionality to create truly impactful digital products. At Lynk Digital, we're passionate about pushing creative boundaries while ensuring everything we create serves a strategic purpose. We believe in the power of digital to tell compelling brand stories, drive engagement, and deliver measurable results. Our team approaches each project with fresh eyes and innovative thinking, ensuring our clients always stay ahead of the curve.",
+      socialLinks: [
+        { icon: <FaLinkedin className="h-4 w-4" />, url: "#" },
+        { icon: <FaTwitter className="h-4 w-4" />, url: "#" },
+        { icon: <FaEnvelope className="h-4 w-4" />, url: "#" },
+      ],
+    },
+  ]
 
   return (
     <>
@@ -111,8 +138,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Our Story Section */}
-      <section className="py-20">
+      {/* <section className="py-30">
         <div className="container px-4 mx-auto">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <motion.div
@@ -188,6 +214,101 @@ export default function AboutPage() {
                 </div>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section> */}
+
+
+ {/* Message from Founders Section */}
+ 
+       <section className="py-16">
+        <div className="container px-4 mx-auto">
+          <motion.div
+            className="text-center max-w-3xl mx-auto mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="inline-block px-4 py-1.5 mb-4 text-xs font-medium uppercase tracking-wider text-lynk-blue rounded-full bg-lynk-blue/10">
+              Our Leadership
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Message From Our Founders</h2>
+            <p className="text-lg text-muted-foreground">
+              Meet the visionaries behind Lynk Digital and learn about our journey and mission.
+            </p>
+          </motion.div>
+
+          <div className="space-y-12">
+            {founders.map((founder, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: index * 0.2 }}
+                className="relative"
+              >
+                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-lynk-navy/20 to-lynk-blue/20 opacity-50 blur-sm" />
+                <Card className="relative border-none overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="flex flex-col md:flex-row">
+                      <div
+                        className={`md:w-1/3 bg-gradient-to-br from-lynk-navy to-lynk-blue p-8 flex flex-col items-center justify-center text-white ${index % 2 === 1 ? "md:order-last" : ""}`}
+                      >
+                        <div className="relative mb-4">
+                          <div className="absolute -inset-1 rounded-full bg-white/20 opacity-50 blur-sm" />
+                          <Image
+                            src={founder.image || "/placeholder.svg"}
+                            alt={founder.name}
+                            width={120}
+                            height={120}
+                            className="rounded-full h-[150px] w-[150px] border-4 border-white/80 relative z-10"
+                          />
+                        </div>
+                        <h3 className="text-xl font-bold mb-1 text-center">{founder.name}</h3>
+                        <p className="text-white/80 text-sm mb-4 text-center">{founder.role}</p>
+                        <div className="flex space-x-3 mt-2">
+                          {founder.socialLinks.map((link, i) => (
+                            <a
+                              key={i}
+                              href={link.url}
+                              className="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors"
+                            >
+                              {link.icon}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="md:w-2/3 p-8">
+                        <div className="h-full flex flex-col justify-center">
+                          <div className="mb-4">
+                            <svg
+                              className="h-8 w-8 text-lynk-blue/30"
+                              fill="currentColor"
+                              viewBox="0 0 32 32"
+                              aria-hidden="true"
+                            >
+                              <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+                            </svg>
+                          </div>
+                          <p className="text-muted-foreground leading-relaxed mb-6">{founder.message}</p>
+                          <div className="mt-auto">
+                            <div className="border-t border-border pt-4">
+                              <p className="italic text-sm text-muted-foreground">
+                                {index === 0
+                                  ? "Our mission is to empower brands through innovative digital solutions."
+                                  : "We believe in creating digital experiences that truly connect with audiences."}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -397,14 +518,19 @@ export default function AboutPage() {
                   for your business.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" variant="secondary" asChild>
+                  <Button size="lg" variant="secondary" asChild className="group">
                     <Link href="/contact">
                       Get in Touch
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className=" group border-lynk-navy text-lynk-navy bg-white/80 hover:bg-white/90 dark:border-white dark:text-white dark:bg-transparent dark:hover:bg-white/10 hover:text-black"
+                  >
                     <Link href="/services">Explore Services</Link>
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
               </div>

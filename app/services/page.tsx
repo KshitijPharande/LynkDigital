@@ -2,6 +2,8 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import {
   ArrowRight,
@@ -20,6 +22,27 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function ServicesPage() {
+  const router = useRouter()
+  const [activeTab, setActiveTab] = useState("web-design")
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace("#", "")
+      const targetTab = hash.replace("-details", "")
+      if (services.some((service) => service.id === targetTab)) {
+        setActiveTab(targetTab)
+        const element = document.getElementById(`${targetTab}-details`)
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" })
+        }
+      }
+    }
+
+    handleHashChange()
+    window.addEventListener("hashchange", handleHashChange)
+    return () => window.removeEventListener("hashchange", handleHashChange)
+  }, [])
+
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -98,17 +121,17 @@ export default function ServicesPage() {
       image: "/placeholder.svg?height=400&width=600",
     },
     {
-      id: "mobile-apps",
-      title: "Mobile App Development",
-      description: "Native and cross-platform mobile applications that deliver exceptional user experiences.",
+      id: "digital-strategy",
+      title: "Digital Strategy & Consulting",
+      description: "Tailored strategies to amplify your brand’s digital presence and achieve business goals.",
       icon: <Smartphone className="h-10 w-10 text-primary" />,
       features: [
-        "iOS and Android development",
-        "Cross-platform solutions",
-        "App store optimization",
-        "UI/UX design for mobile",
+        "Market and competitor analysis",
+        "Digital campaign planning",
+        "Brand positioning strategies",
+        "Customer journey mapping",
         "Performance optimization",
-        "Ongoing maintenance",
+        "Consulting and training",
       ],
       image: "/placeholder.svg?height=400&width=600",
     },
@@ -195,7 +218,6 @@ export default function ServicesPage() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.15),transparent_50%)]" />
-
         <div className="container px-4 mx-auto">
           <div className="max-w-3xl mx-auto text-center">
             <motion.span
@@ -267,6 +289,7 @@ export default function ServicesPage() {
                     <Link
                       href={`#${service.id}-details`}
                       className="inline-flex items-center text-primary font-medium hover:underline"
+                      onClick={() => setActiveTab(service.id)}
                     >
                       Learn more
                       <ArrowRight className="ml-1 h-4 w-4" />
@@ -298,7 +321,7 @@ export default function ServicesPage() {
             </p>
           </motion.div>
 
-          <Tabs defaultValue="web-design" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 mb-8">
               {services.map((service, index) => (
                 <TabsTrigger key={index} value={service.id} className="text-xs md:text-sm">
@@ -438,7 +461,6 @@ export default function ServicesPage() {
             transition={{ duration: 0.7 }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-90" />
-
             <div className="relative z-10 py-16 px-6 md:px-12 lg:px-20 text-white">
               <div className="max-w-3xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Digital Presence?</h2>
@@ -447,19 +469,23 @@ export default function ServicesPage() {
                   for your business.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" variant="secondary" asChild>
+                  <Button size="lg" variant="secondary" asChild className="group">
                     <Link href="/contact">
                       Get in Touch
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                 <Button
+                    size="lg"
+                    variant="outline"
+                    className=" group border-lynk-navy text-lynk-navy bg-white/80 hover:bg-white/90 dark:border-white dark:text-white dark:bg-transparent dark:hover:bg-white/10 hover:text-black"
+                  >
                     <Link href="/about">Learn More About Us</Link>
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
               </div>
             </div>
-
             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
           </motion.div>

@@ -452,15 +452,20 @@ export default function Home() {
                     size="lg"
                     variant="secondary"
                     asChild
-                    className="bg-lynk-blue hover:bg-lynk-blue/90 text-white"
+                    className="bg-lynk-blue hover:bg-lynk-blue/90 text-white group"
                   >
                     <Link href="/contact">
                       Get in Touch
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className=" group border-lynk-navy text-lynk-navy bg-white/80 hover:bg-white/90 dark:border-white dark:text-white dark:bg-transparent dark:hover:bg-white/10 hover:text-black"
+                  >
                     <Link href="/services">Explore Services</Link>
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
               </div>

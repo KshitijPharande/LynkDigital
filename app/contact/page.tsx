@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { FaWhatsapp } from "react-icons/fa";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
@@ -25,24 +25,45 @@ export default function ContactPage() {
     loading: false,
   })
 
+  // Web3Forms Integration
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setFormState((prev) => ({ ...prev, loading: true }))
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const formData = new FormData(e.target as HTMLFormElement)
+      const object = Object.fromEntries(formData)
+      const json = JSON.stringify(object)
 
-    setFormState((prev) => ({
-      ...prev,
-      loading: false,
-      submitted: true,
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: "",
-      service: "web-design",
-    }))
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: json,
+      })
+
+      if (response.status === 200) {
+        setFormState((prev) => ({
+          ...prev,
+          loading: false,
+          submitted: true,
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+          service: "web-design",
+        }))
+      } else {
+        console.error("Web3Forms submission failed:", response.statusText)
+        setFormState((prev) => ({ ...prev, loading: false }))
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error)
+      setFormState((prev) => ({ ...prev, loading: false }))
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -60,19 +81,29 @@ export default function ContactPage() {
       title: "Email Us",
       details: "hello@lynkdigital.com",
       description: "For general inquiries and information",
+      href: "https://mail.google.com/mail/?view=cm&fs=1&to=pharandekshitij@gmail.com"
     },
     {
       icon: <Phone className="h-6 w-6 text-primary" />,
       title: "Call Us",
-      details: "+1 (555) 123-4567",
+      details: "(+91) 8796644348",
       description: "Monday to Friday, 9am to 5pm EST",
+      href: "tel:+15551234567",
     },
     {
-  icon: <FaWhatsapp className="h-6 w-6 text-primary" />,
-  title: "Message Us",
-  details: "+1 (123) 456-7890", // Replace with your WhatsApp number
-  description: "Available on WhatsApp for appointments",
-}
+      icon: <FaWhatsapp className="h-6 w-6 text-primary" />,
+      title: "Message Us",
+      details: "(+91) 8796644348",
+      description: "Available on WhatsApp for Consultation",
+      href: "https://wa.me/+918796644348?text=Hey%20I%27m%20Interested%20in%20your%20Service"
+    },
+    {
+      icon: <FaInstagram className="h-6 w-6 text-primary" />,
+      title: "Instagram",
+      details: "+1 (123) 456-7890",
+      description: "Connect with Us",
+      href: "https://www.instagram.com/"
+    }
   ]
 
   const fadeInUp = {
@@ -86,7 +117,6 @@ export default function ContactPage() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.15),transparent_50%)]" />
-
         <div className="container px-4 mx-auto">
           <div className="max-w-3xl mx-auto text-center">
             <motion.span
@@ -120,7 +150,7 @@ export default function ContactPage() {
       {/* Contact Info Section */}
       <section className="py-12">
         <div className="container px-4 mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {contactInfo.map((item, index) => (
               <motion.div
                 key={index}
@@ -129,17 +159,19 @@ export default function ContactPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Card className="h-full border-none bg-background/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-6 flex flex-col items-center text-center">
-                    <div className="mb-4 relative">
-                      <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary to-secondary opacity-75 blur" />
-                      <div className="relative bg-background rounded-full p-4 w-fit">{item.icon}</div>
-                    </div>
-                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                    <p className="font-medium mb-2">{item.details}</p>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                  </CardContent>
-                </Card>
+                <a href={item.href} target="_blank" rel="noopener noreferrer" aria-label={`Contact via ${item.title}`}>
+                  <Card className="h-full border-none bg-background/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
+                    <CardContent className="p-6 flex flex-col items-center text-center">
+                      <div className="mb-4 relative">
+                        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary to-secondary opacity-75 blur" />
+                        <div className="relative bg-background rounded-full p-4 w-fit">{item.icon}</div>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                      <p className="font-medium mb-2">{item.details}</p>
+                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                </a>
               </motion.div>
             ))}
           </div>
@@ -166,7 +198,6 @@ export default function ContactPage() {
                 Fill out the form and our team will get back to you within 24 hours. We're excited to learn about your
                 project and how we can help bring your vision to life.
               </p>
-
               <div className="space-y-6">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-primary mt-0.5" />
@@ -230,7 +261,10 @@ export default function ContactPage() {
                       </Button>
                     </motion.div>
                   ) : (
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    // Web3Forms Integration
+                    <form onSubmit={handleSubmit} action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
+                      <input type="hidden" name="access_key" value="b7d232d7-193a-4eaf-8ecd-609b0c1da211" />
+                      <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
@@ -257,7 +291,6 @@ export default function ContactPage() {
                             />
                           </div>
                         </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="phone">Phone Number</Label>
@@ -281,7 +314,6 @@ export default function ContactPage() {
                             />
                           </div>
                         </div>
-
                         <div className="space-y-2">
                           <Label>Service of Interest</Label>
                           <RadioGroup
@@ -315,7 +347,6 @@ export default function ContactPage() {
                             </div>
                           </RadioGroup>
                         </div>
-
                         <div className="space-y-2">
                           <Label htmlFor="message">Message</Label>
                           <Textarea
@@ -329,7 +360,6 @@ export default function ContactPage() {
                           />
                         </div>
                       </div>
-
                       <Button type="submit" className="w-full gradient-bg" disabled={formState.loading}>
                         {formState.loading ? (
                           <span className="flex items-center">
@@ -398,8 +428,7 @@ export default function ContactPage() {
             transition={{ duration: 0.7 }}
           >
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary to-secondary opacity-75 blur-sm" />
-            <div className="relative h-full w-full rounded-2xl overflow-hidden">
-              {/* Placeholder for map - in a real implementation, you would use Google Maps or similar */}
+            <div className="relative h-full w-full rounded-2xl">
               <div className="w-full h-full bg-muted flex items-center justify-center">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-primary mx-auto mb-4" />
@@ -412,7 +441,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      /* FAQ Section */
       <section className="py-20">
         <div className="container px-4 mx-auto">
           <motion.div
@@ -430,7 +459,6 @@ export default function ContactPage() {
               Find answers to common questions about our services and process.
             </p>
           </motion.div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {[
               {

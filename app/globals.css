@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 210 40% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 40% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 40% 8%;
+    --primary: 210 50% 45%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 60% 60%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 50% 45%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 210 50% 45%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 210 60% 8%;
+    --foreground: 210 40% 98%;
+    --card: 210 60% 10%;
+    --card-foreground: 210 40% 98%;
+    --popover: 210 60% 10%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 50% 60%;
+    --primary-foreground: 210 60% 8%;
+    --secondary: 210 60% 70%;
+    --secondary-foreground: 210 60% 8%;
+    --muted: 210 60% 15%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 210 50% 60%;
+    --accent-foreground: 210 60% 8%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 210 60% 15%;
+    --input: 210 60% 15%;
+    --ring: 210 50% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-lynk-navy to-lynk-blue;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-r from-lynk-navy to-lynk-blue;
+  }
+
+  .navy-gradient {
+    @apply bg-gradient-to-r from-lynk-navy to-primary;
+  }
+
+  .blue-gradient {
+    @apply bg-gradient-to-r from-primary to-lynk-blue;
+  }
+
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(to right, #2c4a6b, #5ba3d4);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}

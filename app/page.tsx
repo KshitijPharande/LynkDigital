@@ -128,9 +128,9 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <Button size="lg" className="bg-lynk-navy hover:bg-lynk-dark text-white">
+                <Button size="lg" className="bg-lynk-navy hover:bg-lynk-dark text-white group">
                   Get Started
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
                 <Button size="lg" variant="outline" className="border-lynk-blue text-lynk-blue hover:bg-lynk-blue/10">
                   Our Services

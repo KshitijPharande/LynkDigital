@@ -132,7 +132,7 @@ export default function Home() {
                   Get Started
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-lynk-blue text-lynk-blue hover:bg-lynk-blue/10">
+                <Button size="lg" variant="outline" className="border-lynk-blue text-lynk-blue hover:bg-lynk-blue">
                   Our Services
                 </Button>
               </motion.div>

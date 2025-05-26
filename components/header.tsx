@@ -6,7 +6,6 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ModeToggle } from "./mode-toggle"
 import { usePathname } from "next/navigation"
 
 const navItems = [
@@ -29,6 +28,16 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const handleGetStarted = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/contact") {
+      e.preventDefault()
+      const formSection = document.getElementById("contact-form")
+      if (formSection) {
+        formSection.scrollIntoView({ behavior: "smooth" })
+      }
+    }
+  }
 
   return (
     <motion.header
@@ -67,13 +76,15 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
-            <ModeToggle />
-            <Button className="bg-lynk-navy hover:bg-lynk-dark text-white">Get Started</Button>
+           
+            <Button className="bg-lynk-navy hover:bg-lynk-dark text-white">
+              <Link href="/contact#contact-form" onClick={handleGetStarted}>Get Started</Link>
+            </Button>
           </nav>
 
           {/* Mobile Navigation Toggle */}
           <div className="flex items-center md:hidden space-x-4">
-            <ModeToggle />
+       
             <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-foreground" aria-label="Toggle Menu">
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -104,7 +115,9 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
-              <Button className="bg-lynk-navy hover:bg-lynk-dark text-white w-full">Get Started</Button>
+              <Button className="bg-lynk-navy hover:bg-lynk-dark text-white w-full">
+                <Link href="/contact#contact-form" onClick={handleGetStarted}>Get Started</Link>
+              </Button>
             </nav>
           </div>
         </motion.div>

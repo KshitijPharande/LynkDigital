@@ -158,7 +158,7 @@ export default function Home() {
                 />
                 <div className="relative bg-background rounded-2xl overflow-hidden shadow-xl">
                   <Image
-                    src="/placeholder.svg?height=500&width=600"
+                    src="/hero-image.jpg?height=500&width=600"
                     alt="Digital Marketing Dashboard"
                     width={600}
                     height={500}
@@ -336,7 +336,7 @@ export default function Home() {
                 About Us
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                We Help Brands <span className="gradient-text">Grow Loud and Proud</span> in the Digital World
+              Born from a desire to <span className="gradient-text">Bridge creativity and data</span> in the Digital World
               </h2>
               <p className="text-lg text-muted-foreground mb-6">
                 At Lynk Digital, our mission is to empower brands by crafting compelling digital identities, delivering
@@ -348,7 +348,7 @@ export default function Home() {
                   "Innovative design that captures your brand essence",
                   "Strategic marketing that drives real results",
                   "Meaningful digital connections with your audience",
-                  "Data-driven approach to maximize ROI",
+                  "From branding to social media, SEO to paid ads — we deliver end-to-end marketing solutions.",
                 ].map((item, index) => (
                   <motion.li
                     key={index}

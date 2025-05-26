@@ -77,20 +77,20 @@ export default function AboutPage() {
   const founders = [
     {
       name: "Roma Devadhar",
-      role: "Co-Founder & CEO",
-      image: "/founder-1.png",
+      role: "Co-Founder and Director",
+      image: "/roma.png",
       message:
-        "When we started Lynk Digital, we had a clear vision: to create a digital agency that truly understands the evolving needs of modern businesses. With over 15 years in the tech industry, I've witnessed firsthand how the right digital strategy can transform a company's trajectory. At Lynk Digital, we don't just build websites or run campaigns – we create digital experiences that connect brands with their audiences in meaningful ways. Our approach combines technical expertise with creative innovation, always keeping our clients' business objectives at the center of everything we do.",
+        "When I founded this company at 19, it wasn't just about building websites or running campaigns, it was about creating a space where businesses could find clarity in the chaos of the digital world. A place where innovation meets intention. We believe real results come from real relationships. As we grow, our commitment stays the same: to be the digital partner you can trust, every step of the way. Let's build something great together.",
       socialLinks: [
         { icon: <FaEnvelope className="h-4 w-4" />, url: "#" },
       ],
     },
     {
       name: "Swarada Mhetre",
-      role: "Co-Founder & Creative Director",
-      image: "/placeholder.svg?height=200&width=200",
+      role: "Co-Founder and Director",
+      image: "/swarada.png",
       message:
-        "The digital landscape is constantly evolving, and with it, the expectations of users. My background in design and user experience has taught me that beautiful aesthetics must be paired with intuitive functionality to create truly impactful digital products. At Lynk Digital, we're passionate about pushing creative boundaries while ensuring everything we create serves a strategic purpose. We believe in the power of digital to tell compelling brand stories, drive engagement, and deliver measurable results. Our team approaches each project with fresh eyes and innovative thinking, ensuring our clients always stay ahead of the curve.",
+        "We started Lynk Digital at 20 not because I had it all figured out — but because I saw something most agencies were missing: authenticity with an edge. In a space flooded with formulas and trends, I wanted to create a marketing agency that felt intentional, elevated, and quietly powerful. One that understood the digital world isn't just about being loud — it's about being undeniable. Lynk Digital was built for brands that want more than likes. Brands that crave identity, clarity, and timeless relevance. We blend smart strategy with elegant execution — and we never do average. This isn't just a business. It's a movement — proof that age doesn't define expertise, and great ideas don't need decades. Just vision, discipline, and the courage to build differently.Welcome to Lynk Digital. For the brands that don't follow. They lead",
       socialLinks: [
         { icon: <FaEnvelope className="h-4 w-4" />, url: "#" },
       ],
@@ -127,8 +127,7 @@ export default function AboutPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              A team of passionate digital experts dedicated to transforming ideas into impactful experiences through
-              innovative design, strategic marketing, and meaningful digital connections.
+              At Lynk Digital, We don't just build websites or run campaigns — we create digital experiences that drive results. From concept to execution, we're your partner in turning vision into value.
             </motion.p>
           </div>
         </div>
@@ -221,7 +220,7 @@ export default function AboutPage() {
         <div className="container px-4 mx-auto">
           <motion.div
             className="text-center max-w-3xl mx-auto mb-16"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
@@ -241,8 +240,8 @@ export default function AboutPage() {
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: index * 0.2 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
                 className="relative"
               >
                 <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-lynk-navy/20 to-lynk-blue/20 opacity-50 blur-sm" />
@@ -255,11 +254,11 @@ export default function AboutPage() {
                         <div className="relative mb-4">
                           <div className="absolute -inset-1 rounded-full bg-white/20 opacity-50 blur-sm" />
                           <Image
-                            src={founder.image || "/placeholder.svg"}
+                            src={founder.image}
                             alt={founder.name}
-                            width={160}
-                            height={160}
-                            className="rounded-full h-[150px] w-[150px] border-4 border-white/80 relative z-10"
+                            width={300}
+                            height={300}
+                            className="rounded-full h-[140px] w-[140px] object-cover border-4 border-white/80 relative z-10 scale-125"
                           />
                         </div>
                         <h3 className="text-xl font-bold mb-1 text-center">{founder.name}</h3>
@@ -338,17 +337,16 @@ export default function AboutPage() {
                 <CardContent className="p-8">
                   <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
                   <p className="text-muted-foreground mb-6">
-                    At Lynk Digital, our mission is to empower brands by crafting compelling digital identities,
-                    delivering cutting-edge web and UI/UX solutions, and executing data-driven social media strategies
-                    that drive engagement, growth, and measurable results. We're here to help brands grow loud and proud
-                    in the digital world.
+                  At Lynk Digital, we empower brands to shine in the digital world, our mission is to craft compelling digital identities, deliver cutting-edge web and UI/UX solutions, and drive bold, data-driven marketing strategies. We build authentic connections that spark engagement,
+                   fuel growth, and deliver measurable results. With us,
+                   your brand doesn't just compete—it leads.
                   </p>
                   <ul className="space-y-3">
                     {[
-                      "Create compelling digital identities",
+                      "Craft authentic, unforgettable digital identities",
                       "Deliver cutting-edge web solutions",
                       "Execute data-driven marketing strategies",
-                      "Drive measurable growth and engagement",
+                      "Drive engagement and measurable growth",
                     ].map((item, index) => (
                       <li key={index} className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -372,17 +370,16 @@ export default function AboutPage() {
                 <CardContent className="p-8">
                   <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
                   <p className="text-muted-foreground mb-6">
-                    To be the leading digital catalyst for brands, transforming ideas into impactful experiences through
-                    innovative design, strategic marketing, and meaningful digital connections. We envision a world
-                    where every brand can effectively communicate its unique value and connect authentically with its
-                    audience in the digital space.
+                  We envision Lynk Digital as the ultimate digital catalyst, transforming bold ideas into impactful experiences. Our goal is to pioneer innovative design and strategic marketing, creating meaningful connections that resonate with
+                  audiences worldwide. We're here to help every brand find its voice, stand out, 
+                  and build a legacy in the digital age.
                   </p>
                   <ul className="space-y-3">
                     {[
                       "Be the leading digital catalyst for brands",
                       "Transform ideas into impactful experiences",
-                      "Pioneer innovative design and marketing",
-                      "Create meaningful digital connections",
+                      "Innovate in design and strategic marketing",
+                      "Foster authentic, meaningful digital connections",
                     ].map((item, index) => (
                       <li key={index} className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -444,7 +441,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-20 bg-muted/30">
+      {/* <section className="py-20 bg-muted/30">
         <div className="container px-4 mx-auto">
           <motion.div
             className="text-center max-w-3xl mx-auto mb-16"
@@ -492,7 +489,7 @@ export default function AboutPage() {
             ))}
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       <section className="py-20">

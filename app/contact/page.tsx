@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -24,6 +24,19 @@ export default function ContactPage() {
     submitted: false,
     loading: false,
   })
+
+  useEffect(() => {
+    // Check if there's a hash in the URL
+    if (window.location.hash === '#contact-form') {
+      // Wait a bit for the page to fully load
+      setTimeout(() => {
+        const formSection = document.getElementById('contact-form')
+        if (formSection) {
+          formSection.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+    }
+  }, [])
 
   // Web3Forms Integration
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,16 +99,16 @@ export default function ContactPage() {
     {
       icon: <Phone className="h-6 w-6 text-primary" />,
       title: "Call Us",
-      details: "(+91) 8796644348",
+      details: "(+91) 8010195467",
       description: "Monday to Friday, 9am to 5pm EST",
-      href: "tel:+15551234567",
+      href: "tel:+918010195467",
     },
     {
       icon: <FaWhatsapp className="h-6 w-6 text-primary" />,
       title: "Message Us",
-      details: "(+91) 8796644348",
+      details: "(+91) 9930632999",
       description: "Available on WhatsApp for Consultation",
-      href: "https://wa.me/+918796644348?text=Hey%20I%27m%20Interested%20in%20your%20Service"
+      href: "https://wa.me/+9930632999?text=Hey%20I%27m%20Interested%20in%20your%20Service"
     },
     {
       icon: <FaInstagram className="h-6 w-6 text-primary" />,
@@ -115,7 +128,7 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden">
+      <section className="pt-32 pb-8 md:pt-40 md:pb-12 relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.15),transparent_50%)]" />
         <div className="container px-4 mx-auto">
           <div className="max-w-3xl mx-auto text-center">
@@ -148,7 +161,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Info Section */}
-      <section className="py-12">
+      <section className="py-8">
         <div className="container px-4 mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {contactInfo.map((item, index) => (
@@ -179,7 +192,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="py-20">
+      <section className="py-20" id="contact-form">
         <div className="container px-4 mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -402,7 +415,7 @@ export default function ContactPage() {
       </section>
 
       {/* Map Section */}
-      <section className="py-20 bg-muted/30">
+      {/* <section className="py-20 bg-muted/30">
         <div className="container px-4 mx-auto">
           <motion.div
             className="text-center max-w-3xl mx-auto mb-16"
@@ -439,11 +452,11 @@ export default function ContactPage() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section  */}
       <section className="py-20">
-        <div className="container px-4 mx-auto">
+        <div className="container px-4 mx-auto ">
           <motion.div
             className="text-center max-w-3xl mx-auto mb-16"
             initial={{ opacity: 0, y: 20 }}
@@ -459,7 +472,7 @@ export default function ContactPage() {
               Find answers to common questions about our services and process.
             </p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto ">
             {[
               {
                 question: "What is your typical process for a new project?",

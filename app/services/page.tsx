@@ -63,23 +63,24 @@ export default function ServicesPage() {
     {
       id: "web-design",
       title: "Web Design & Development",
-      description: "Custom websites that captivate and convert, built with cutting-edge technology.",
+      description: "We craft visually stunning, user-friendly websites tailored to your brand and business goals. Our web design services focus on creating engaging layouts and seamless user experiences, while our development team brings your site to life with clean, responsive, and secure code.",
       icon: <Code className="h-10 w-10 text-primary" />,
+      primary: "Stunning, responsive websites that elevate your brand's success.",
       features: [
         "Responsive design for all devices",
         "Custom UI/UX development",
-        "E-commerce solutions",
-        "Content management systems",
-        "Performance optimization",
-        "Maintenance and support",
+        "Speed and SEO optimization",
+        "Ongoing support and updates",
+        "We build websites that deliver results.",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "/hero-image.jpg?height=500&width=600",
     },
     {
       id: "ui-ux",
       title: "UI/UX Design",
-      description: "Intuitive interfaces and seamless user experiences that delight and engage.",
+      description: "We design intuitive and engaging user interfaces (UI) that enhance user experiences (UX) across web and mobile platforms.",
       icon: <Palette className="h-10 w-10 text-primary" />,
+    primary: "Intuitive interfaces that engage and delight your users.",
       features: [
         "User research and testing",
         "Wireframing and prototyping",
@@ -88,22 +89,23 @@ export default function ServicesPage() {
         "Usability testing",
         "Design systems",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "/hero-image.jpg?height=500&width=600",
     },
     {
       id: "social-media",
       title: "Social Media Marketing",
-      description: "Strategic campaigns that boost engagement and drive meaningful connections.",
+      description: "We help you grow your brand and connect with your audience through strategic social media marketing. From content creation and campaign management to analytics and engagement, we build a strong online presence across platforms like Instagram, Facebook, LinkedIn, and more.",
       icon: <Megaphone className="h-10 w-10 text-primary" />,
+      primary: "Bold strategies to grow your audience and engagement.",
       features: [
         "Platform strategy and management",
         "Content creation and curation",
-        "Community management",
-        "Paid social campaigns",
-        "Influencer partnerships",
-        "Analytics and reporting",
+        "Setting up and improving profiles",
+        "Running ads to reach more people",
+        "Analytics, Tracking and reporting",
+        "Reach the right people and grow your business online",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "/hero-image.jpg?height=500&width=600",
     },
     // {
     //   id: "analytics",
@@ -123,47 +125,50 @@ export default function ServicesPage() {
     {
       id: "digital-strategy",
       title: "Digital Strategy & Consulting",
-      description: "Tailored strategies to amplify your brand’s digital presence and achieve business goals.",
+      description: "We guide your business with smart digital plans that get results.",
       icon: <Smartphone className="h-10 w-10 text-primary" />,
+      primary: "Smart digital plans to drive your business forward.",
       features: [
-        "Market and competitor analysis",
-        "Digital campaign planning",
+        "Online growth planning",
+        "Brand and market analysis",
         "Brand positioning strategies",
-        "Customer journey mapping",
-        "Performance optimization",
-        "Consulting and training",
+        "Content and marketing strategy",
+        "Performance review and Consultation",
+        "Clear strategies to help your business succeed online.",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "/hero-image.jpg?height=500&width=600",
     },
     {
       id: "branding",
       title: "Branding & Identity",
-      description: "Compelling brand identities that resonate with your audience and stand out in the market.",
+      description: "We create impactful brand identities that tell your story and leave a lasting impression. From logo design and color palettes to typography and brand guidelines, we develop a cohesive visual language that reflects your values and sets you apart.",
       icon: <PenTool className="h-10 w-10 text-primary" />,
+      primary: "Compelling brand identities that resonate with your audience and stand out in the market.",
       features: [
         "Brand strategy",
         "Logo design",
         "Visual identity systems",
         "Brand guidelines",
-        "Brand messaging",
-        "Brand collateral",
+        "Rebranding support",
+        "Stand out and make a lasting impression",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "/hero-image.jpg?height=500&width=600",
     },
     {
       id: "seo",
       title: "SEO & Content Strategy",
-      description: "Optimized content and technical SEO to improve visibility and drive organic traffic.",
+      description: "We boost your online visibility with smart SEO and content strategies that drive organic traffic and improve search rankings.",
       icon: <Search className="h-10 w-10 text-primary" />,
+      primary: "Powerful SEO to boost visibility and attract audiences.",
       features: [
         "Keyword research and strategy",
         "On-page optimization",
         "Technical SEO audits",
         "Content creation and optimization",
-        "Link building",
+        "Blog and website content planning",
         "Performance tracking",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "/hero-image.jpg?height=500&width=600",
     },
     // {
     //   id: "ecommerce",
@@ -286,7 +291,7 @@ export default function ServicesPage() {
                       <div className="relative bg-background rounded-full p-4 w-fit">{service.icon}</div>
                     </div>
                     <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-                    <p className="text-muted-foreground mb-4">{service.description}</p>
+                    <p className="text-muted-foreground mb-4">{service.primary}</p>
                     <Link
                       href={`#${service.id}-details`}
                       className="inline-flex items-center text-primary font-medium hover:underline"
@@ -323,17 +328,23 @@ export default function ServicesPage() {
           </motion.div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 mb-8">
-              {services.map((service, index) => (
-                <TabsTrigger key={index} value={service.id} className="text-xs md:text-sm">
-                  {service.title.split(" ")[0]}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <div className="relative w-full overflow-auto mb-16">
+              <TabsList className="inline-flex h-auto w-full flex-wrap justify-start gap-2 bg-transparent p-0">
+                {services.map((service, index) => (
+                  <TabsTrigger 
+                    key={index} 
+                    value={service.id} 
+                    className="rounded-full border border-border px-4 py-2 text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  >
+                    {service.title.split(" ")[0]}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
             {services.map((service, index) => (
-              <TabsContent key={index} value={service.id} id={`${service.id}-details`}>
+              <TabsContent key={index} value={service.id} id={`${service.id}-details`} className="mt-0">
                 <motion.div
-                  className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
@@ -376,11 +387,11 @@ export default function ServicesPage() {
                     />
                     <div className="relative rounded-2xl overflow-hidden">
                       <Image
-                        src={service.image || "/placeholder.svg"}
+                        src={service.image}
                         alt={service.title}
-                        width={600}
-                        height={400}
-                        className="w-full h-auto"
+                        width={400}
+                        height={300}
+                        className="w-full h-[600px] object-cover"
                       />
                     </div>
                   </div>

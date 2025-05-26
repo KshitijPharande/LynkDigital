@@ -84,11 +84,6 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link href="#" className="text-sm text-white/80 hover:text-lynk-blue transition-colors">
-                  Blog
-                </Link>
-              </li>
             </ul>
           </motion.div>
 
@@ -155,7 +150,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-3">
                 <Phone size={18} className="text-lynk-blue flex-shrink-0" />
-                <span className="text-sm text-white/80">+1 (555) 123-4567</span>
+                <span className="text-sm text-white/80">(+91) 8010195467</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail size={18} className="text-lynk-blue flex-shrink-0" />

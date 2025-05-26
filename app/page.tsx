@@ -50,8 +50,8 @@ export default function Home() {
       icon: <Megaphone className="h-10 w-10 text-lynk-blue" />,
     },
     {
-      title: "Analytics & Insights",
-      description: "Data-driven strategies to optimize performance and maximize ROI.",
+      title: "Marketing Consultation",
+      description: "to be updated",
       icon: <BarChart className="h-10 w-10 text-lynk-blue" />,
     },
   ]
@@ -119,7 +119,7 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                At Lynk Digital, we empower brands by crafting compelling digital identities, delivering cutting-edge
+                At Lynk Digital, we empower brands by crafting,compelling digital identities, delivering cutting-edge
                 web solutions, and executing data-driven strategies that drive engagement and growth.
               </motion.p>
               <motion.div
@@ -166,7 +166,7 @@ export default function Home() {
                   />
                 </div>
 
-                <motion.div
+                {/* <motion.div
                   className="absolute -bottom-6 -left-6 bg-background rounded-lg p-4 shadow-lg border border-lynk-blue/20"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -181,9 +181,9 @@ export default function Home() {
                       <p className="text-lg font-bold text-lynk-navy">100+ Brands</p>
                     </div>
                   </div>
-                </motion.div>
+                </motion.div> */}
 
-                <motion.div
+                {/* <motion.div
                   className="absolute -top-6 -right-6 bg-background rounded-lg p-4 shadow-lg border border-lynk-blue/20"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -198,7 +198,7 @@ export default function Home() {
                       <p className="text-lg font-bold text-lynk-navy">3x ROI</p>
                     </div>
                   </div>
-                </motion.div>
+                </motion.div> */}
               </div>
             </motion.div>
           </div>
@@ -363,10 +363,10 @@ export default function Home() {
                   </motion.li>
                 ))}
               </ul>
-              <Button size="lg" asChild className="bg-lynk-navy hover:bg-lynk-dark text-white">
+              <Button size="lg" asChild className=" group bg-lynk-navy hover:bg-lynk-dark text-white">
                 <Link href="/about">
                   Learn More About Us
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                 <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </motion.div>
@@ -374,7 +374,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Testimonials Section
       <section className="py-20 bg-muted/30">
         <div className="container px-4 mx-auto">
           <motion.div
@@ -426,7 +426,7 @@ export default function Home() {
             ))}
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       <section className="py-20">

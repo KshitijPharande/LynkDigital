@@ -105,21 +105,21 @@ export default function ServicesPage() {
       ],
       image: "/placeholder.svg?height=400&width=600",
     },
-    {
-      id: "analytics",
-      title: "Analytics & Insights",
-      description: "Data-driven strategies to optimize performance and maximize ROI.",
-      icon: <BarChart className="h-10 w-10 text-primary" />,
-      features: [
-        "Performance tracking",
-        "Conversion optimization",
-        "User behavior analysis",
-        "Custom reporting dashboards",
-        "A/B testing",
-        "Strategic recommendations",
-      ],
-      image: "/placeholder.svg?height=400&width=600",
-    },
+    // {
+    //   id: "analytics",
+    //   title: "Analytics & Insights",
+    //   description: "Data-driven strategies to optimize performance and maximize ROI.",
+    //   icon: <BarChart className="h-10 w-10 text-primary" />,
+    //   features: [
+    //     "Performance tracking",
+    //     "Conversion optimization",
+    //     "User behavior analysis",
+    //     "Custom reporting dashboards",
+    //     "A/B testing",
+    //     "Strategic recommendations",
+    //   ],
+    //   image: "/placeholder.svg?height=400&width=600",
+    // },
     {
       id: "digital-strategy",
       title: "Digital Strategy & Consulting",
@@ -165,21 +165,21 @@ export default function ServicesPage() {
       ],
       image: "/placeholder.svg?height=400&width=600",
     },
-    {
-      id: "ecommerce",
-      title: "E-Commerce Solutions",
-      description: "End-to-end e-commerce development to help you sell products and services online.",
-      icon: <Globe className="h-10 w-10 text-primary" />,
-      features: [
-        "Custom e-commerce websites",
-        "Shopping cart development",
-        "Payment gateway integration",
-        "Inventory management",
-        "Order fulfillment systems",
-        "Customer account management",
-      ],
-      image: "/placeholder.svg?height=400&width=600",
-    },
+    // {
+    //   id: "ecommerce",
+    //   title: "E-Commerce Solutions",
+    //   description: "End-to-end e-commerce development to help you sell products and services online.",
+    //   icon: <Globe className="h-10 w-10 text-primary" />,
+    //   features: [
+    //     "Custom e-commerce websites",
+    //     "Shopping cart development",
+    //     "Payment gateway integration",
+    //     "Inventory management",
+    //     "Order fulfillment systems",
+    //     "Customer account management",
+    //   ],
+    //   image: "/placeholder.svg?height=400&width=600",
+    // },
   ]
 
   const process = [
@@ -212,11 +212,12 @@ export default function ServicesPage() {
       description: "Continuous monitoring and optimization to improve performance and results over time.",
     },
   ]
-
+ 
   return (
     <>
+    
       {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden">
+      <section className="pt-32 pb-18 md:pt-40 md:pb-26 relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.15),transparent_50%)]" />
         <div className="container px-4 mx-auto">
           <div className="max-w-3xl mx-auto text-center">
@@ -270,7 +271,7 @@ export default function ServicesPage() {
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"

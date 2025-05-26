@@ -82,8 +82,6 @@ export default function AboutPage() {
       message:
         "When we started Lynk Digital, we had a clear vision: to create a digital agency that truly understands the evolving needs of modern businesses. With over 15 years in the tech industry, I've witnessed firsthand how the right digital strategy can transform a company's trajectory. At Lynk Digital, we don't just build websites or run campaigns – we create digital experiences that connect brands with their audiences in meaningful ways. Our approach combines technical expertise with creative innovation, always keeping our clients' business objectives at the center of everything we do.",
       socialLinks: [
-        { icon: <FaLinkedin className="h-4 w-4" />, url: "#" },
-        { icon: <FaTwitter className="h-4 w-4" />, url: "#" },
         { icon: <FaEnvelope className="h-4 w-4" />, url: "#" },
       ],
     },
@@ -94,8 +92,6 @@ export default function AboutPage() {
       message:
         "The digital landscape is constantly evolving, and with it, the expectations of users. My background in design and user experience has taught me that beautiful aesthetics must be paired with intuitive functionality to create truly impactful digital products. At Lynk Digital, we're passionate about pushing creative boundaries while ensuring everything we create serves a strategic purpose. We believe in the power of digital to tell compelling brand stories, drive engagement, and deliver measurable results. Our team approaches each project with fresh eyes and innovative thinking, ensuring our clients always stay ahead of the curve.",
       socialLinks: [
-        { icon: <FaLinkedin className="h-4 w-4" />, url: "#" },
-        { icon: <FaTwitter className="h-4 w-4" />, url: "#" },
         { icon: <FaEnvelope className="h-4 w-4" />, url: "#" },
       ],
     },
@@ -104,7 +100,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden">
+      <section className="pt-32 pb-14 md:pt-40 md:pb-26 relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.15),transparent_50%)]" />
 
         <div className="container px-4 mx-auto">
@@ -261,8 +257,8 @@ export default function AboutPage() {
                           <Image
                             src={founder.image || "/placeholder.svg"}
                             alt={founder.name}
-                            width={120}
-                            height={120}
+                            width={160}
+                            height={160}
                             className="rounded-full h-[150px] w-[150px] border-4 border-white/80 relative z-10"
                           />
                         </div>

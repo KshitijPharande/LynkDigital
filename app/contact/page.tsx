@@ -441,7 +441,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      /* FAQ Section */
+      {/* FAQ Section  */}
       <section className="py-20">
         <div className="container px-4 mx-auto">
           <motion.div

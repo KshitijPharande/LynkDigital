@@ -43,7 +43,7 @@ export default function Footer() {
                 <Twitter size={20} />
                 <span className="sr-only">Twitter</span>
               </Link> */}
-              <Link href="#" className="text-white/60 hover:text-lynk-blue transition-colors">
+              <Link href="https://www.instagram.com/lynk.digital_?igsh=Zm5jazNleGlqZDg3"target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-lynk-blue transition-colors">
                 <Instagram size={20} />
                 <span className="sr-only">Instagram</span>
               </Link>

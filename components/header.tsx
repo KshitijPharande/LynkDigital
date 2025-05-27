@@ -115,9 +115,6 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
-              <Button className="bg-lynk-navy hover:bg-lynk-dark text-white w-full">
-                <Link href="/contact#contact-form" onClick={handleGetStarted}>Get Started</Link>
-              </Button>
             </nav>
           </div>
         </motion.div>

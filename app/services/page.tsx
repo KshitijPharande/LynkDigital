@@ -80,7 +80,7 @@ export default function ServicesPage() {
       title: "UI/UX Design",
       description: "We design intuitive and engaging user interfaces (UI) that enhance user experiences (UX) across web and mobile platforms.",
       icon: <Palette className="h-10 w-10 text-primary" />,
-      primary: "Intuitive interfaces that engage and delight your users.",
+    primary: "Intuitive interfaces that engage and delight your users.",
       features: [
         "User research and testing",
         "Wireframing and prototyping",

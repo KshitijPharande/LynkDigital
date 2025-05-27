@@ -186,12 +186,16 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <Button size="lg" className="bg-lynk-navy hover:bg-lynk-dark text-white group">
-                  Get Started
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <Button size="lg" asChild className="bg-lynk-navy hover:bg-lynk-dark text-white group">
+                  <Link href="/contact#contact-form">
+                    Get Started
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-lynk-blue text-lynk-blue hover:bg-lynk-blue">
-                  Our Services
+                <Button size="lg" variant="outline" asChild className="border-lynk-blue text-lynk-blue hover:bg-lynk-blue hover:text-white">
+                  <Link href="/services">
+                    Our Services
+                  </Link>
                 </Button>
               </motion.div>
             </motion.div>

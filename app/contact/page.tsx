@@ -92,9 +92,9 @@ export default function ContactPage() {
     {
       icon: <Mail className="h-6 w-6 text-primary" />,
       title: "Email Us",
-      details: "hello@lynkdigital.com",
+      details: "hello@lynkdigital.co.in",
       description: "For general inquiries and information",
-      href: "https://mail.google.com/mail/?view=cm&fs=1&to=pharandekshitij@gmail.com"
+      href: "https://mail.google.com/mail/?view=cm&fs=1&to=hello@lynkdigital.co.in"
     },
     {
       icon: <Phone className="h-6 w-6 text-primary" />,
@@ -276,7 +276,7 @@ export default function ContactPage() {
                   ) : (
                     // Web3Forms Integration
                     <form onSubmit={handleSubmit} action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
-                      <input type="hidden" name="access_key" value="b7d232d7-193a-4eaf-8ecd-609b0c1da211" />
+                      <input type="hidden" name="access_key" value="b445c2f1-7a8e-414d-8cfa-956cc15b207d" />
                       <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

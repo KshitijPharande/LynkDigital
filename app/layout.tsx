@@ -13,7 +13,10 @@ export const metadata: Metadata = {
   title: "Lynk Digital | Transforming Ideas into Digital Experiences",
   description:
     "Empowering brands with cutting-edge web design, UI/UX solutions, and data-driven social media strategies.",
-    generator: 'v0.dev'
+    generator: 'v0.dev',
+    icons: {
+    icon: "/lynkdigital.svg", // Reference the SVG favicon in the public folder
+  },
 }
 
 export default function RootLayout({

@@ -10,13 +10,50 @@ import ScrollToTop from "@/components/scroll-to-top"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Lynk Digital | Transforming Ideas into Digital Experiences",
-  description:
-    "Empowering brands with cutting-edge web design, UI/UX solutions, and data-driven social media strategies.",
-    generator: 'v0.dev',
-    icons: {
-    icon: "/lynkdigital.svg", // Reference the SVG favicon in the public folder
+  title: {
+    default: 'Lynk Digital | Transform Your Digital Presence',
+    template: '%s | Lynk Digital'
   },
+  description: 'Transform your digital presence with Lynk Digital. Expert web design, UI/UX, digital marketing, and brand development services tailored for modern businesses.',
+  keywords: ['web design', 'digital marketing', 'UI/UX design', 'SEO services', 'social media marketing', 'brand development', 'digital strategy'],
+  authors: [{ name: 'Lynk Digital' }],
+  creator: 'Lynk Digital',
+  publisher: 'Lynk Digital',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'Lynk Digital',
+    title: 'Lynk Digital | Transform Your Digital Presence',
+    description: 'Transform your digital presence with expert web design, UI/UX, and digital marketing services. Custom solutions for modern businesses.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Lynk Digital - Modern Digital Solutions',
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: '3lb-4I42I4zb7MIahCpGxYBJL7zIfTMNCKKQmoIk9Bg',
+  },
+  category: 'technology',
 }
 
 export default function RootLayout({
@@ -29,7 +66,9 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark" disableTransitionOnChange>
           <Header />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow">
+            {children}
+          </main>
           <Footer />
           <ScrollToTop/>
         </ThemeProvider>

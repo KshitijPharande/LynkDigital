@@ -154,7 +154,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-3">
                 <Mail size={18} className="text-lynk-blue flex-shrink-0" />
-                <span className="text-sm text-white/80">hello@lynkdigital.com</span>
+                <span className="text-sm text-white/80">hello@lynkdigital.co.in</span>
               </li>
             </ul>
           </motion.div>

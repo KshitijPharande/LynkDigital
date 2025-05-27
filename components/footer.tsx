@@ -31,7 +31,7 @@ export default function Footer() {
               <span className="ml-3 text-xl font-bold text-lynk-blue">Lynk Digital</span>
             </Link>
             <p className="text-sm text-white/80">
-              Empowering brands by crafting compelling digital identities, delivering cutting-edge web and UI/UX
+              Lynk Digital-Empowering brands by crafting compelling digital identities, delivering cutting-edge web and UI/UX
               solutions.
             </p>
             <div className="flex space-x-4">

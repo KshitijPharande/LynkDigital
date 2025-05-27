@@ -104,11 +104,11 @@ export default function ContactPage() {
       href: "tel:+918010195467",
     },
     {
-      icon: <FaWhatsapp className="h-6 w-6 text-primary" />,
-      title: "Message Us",
-      details: "(+91) 9930632999",
-      description: "Available on WhatsApp for Consultation",
-      href: "https://wa.me/+9930632999?text=Hey%20I%27m%20Interested%20in%20your%20Service"
+    icon: <FaWhatsapp className="h-6 w-6 text-primary" />,
+    title: "Message Us",
+    details: "+91 99306 32999", // Updated to the new number
+    description: "Available on WhatsApp for Consultation",
+    href: "https://wa.me/+919930632999?text=Hey%20I%27m%20Interested%20in%20your%20Service" // Updated with the new number
     },
     {
       icon: <FaInstagram className="h-6 w-6 text-primary" />,

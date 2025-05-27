@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://lynkdigital.com'
+  const baseUrl = 'https://lynkdigital.co.in'
 
   // Add all your static routes
   const routes = [

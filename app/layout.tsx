@@ -10,6 +10,7 @@ import ScrollToTop from "@/components/scroll-to-top"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://lynkdigital.co.in'),
   title: {
     default: 'Lynk Digital | Transform Your Digital Presence',
     template: '%s | Lynk Digital'
@@ -27,6 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
+    url: 'https://lynkdigital.co.in',
     siteName: 'Lynk Digital',
     title: 'Lynk Digital | Transform Your Digital Presence',
     description: 'Transform your digital presence with expert web design, UI/UX, and digital marketing services. Custom solutions for modern businesses.',
@@ -52,6 +54,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: '3lb-4I42I4zb7MIahCpGxYBJL7zIfTMNCKKQmoIk9Bg',
+  },
+  alternates: {
+    canonical: 'https://lynkdigital.co.in',
   },
   category: 'technology',
 }

@@ -100,7 +100,7 @@ export default function ContactPage() {
       icon: <Phone className="h-6 w-6 text-primary" />,
       title: "Call Us",
       details: "(+91) 8010195467",
-      description: "Monday to Friday, 9am to 5pm EST",
+      description: "Monday to Friday, 9am to 5pm IST",
       href: "tel:+918010195467",
     },
     {
@@ -113,9 +113,9 @@ export default function ContactPage() {
     {
       icon: <FaInstagram className="h-6 w-6 text-primary" />,
       title: "Instagram",
-      details: "+1 (123) 456-7890",
+      details: "@LynkDigital",
       description: "Connect with Us",
-      href: "https://www.instagram.com/"
+      href: "https://www.instagram.com/lynk.digital_?igsh=Zm5jazNleGlqZDg3"
     }
   ]
 

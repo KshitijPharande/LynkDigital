@@ -73,14 +73,14 @@ export default function ServicesPage() {
         "Ongoing support and updates",
         "We build websites that deliver results.",
       ],
-      image: "/hero-image.jpg?height=500&width=600",
+      image: "/web.webp",
     },
     {
       id: "ui-ux",
       title: "UI/UX Design",
       description: "We design intuitive and engaging user interfaces (UI) that enhance user experiences (UX) across web and mobile platforms.",
       icon: <Palette className="h-10 w-10 text-primary" />,
-    primary: "Intuitive interfaces that engage and delight your users.",
+      primary: "Intuitive interfaces that engage and delight your users.",
       features: [
         "User research and testing",
         "Wireframing and prototyping",
@@ -89,7 +89,7 @@ export default function ServicesPage() {
         "Usability testing",
         "Design systems",
       ],
-      image: "/hero-image.jpg?height=500&width=600",
+      image: "/uiux.webp",
     },
     {
       id: "social-media",
@@ -105,7 +105,7 @@ export default function ServicesPage() {
         "Analytics, Tracking and reporting",
         "Reach the right people and grow your business online",
       ],
-      image: "/hero-image.jpg?height=500&width=600",
+      image: "/socialmedia.webp",
     },
     // {
     //   id: "analytics",
@@ -136,7 +136,7 @@ export default function ServicesPage() {
         "Performance review and Consultation",
         "Clear strategies to help your business succeed online.",
       ],
-      image: "/hero-image.jpg?height=500&width=600",
+      image: "/digitalstatergy.webp",
     },
     {
       id: "branding",
@@ -152,7 +152,7 @@ export default function ServicesPage() {
         "Rebranding support",
         "Stand out and make a lasting impression",
       ],
-      image: "/hero-image.jpg?height=500&width=600",
+      image: "/branding.webp",
     },
     {
       id: "seo",
@@ -168,7 +168,7 @@ export default function ServicesPage() {
         "Blog and website content planning",
         "Performance tracking",
       ],
-      image: "/hero-image.jpg?height=500&width=600",
+      image: "/seo.webp",
     },
     // {
     //   id: "ecommerce",
@@ -389,9 +389,10 @@ export default function ServicesPage() {
                       <Image
                         src={service.image}
                         alt={service.title}
-                        width={400}
-                        height={300}
-                        className="w-full h-[600px] object-cover"
+                        width={800}
+                        height={600}
+                        className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover"
+                        priority
                       />
                     </div>
                   </div>

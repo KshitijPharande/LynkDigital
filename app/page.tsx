@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { ArrowRight, CheckCircle, Code, Palette, Megaphone, BarChart, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import Script from "next/script"
 
 export default function Home() {
   const ref = useRef(null)
@@ -82,6 +83,63 @@ export default function Home() {
 
   return (
     <>
+      <Script
+        id="schema-org"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Lynk Digital",
+            "url": "https://lynkdigital.com",
+            "logo": "https://lynkdigital.com/logo.png",
+            "description": "Digital agency specializing in web development, UI/UX design, and digital marketing solutions",
+            "sameAs": [
+              "https://twitter.com/lynkdigital",
+              "https://www.linkedin.com/company/lynkdigital",
+              "https://www.instagram.com/lynkdigital"
+            ],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Digital Services",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Web Design & Development",
+                    "description": "Custom websites that captivate and convert, built with cutting-edge technology"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "UI/UX Design",
+                    "description": "Intuitive interfaces and seamless user experiences that delight and engage"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Social Media Marketing",
+                    "description": "Strategic campaigns that boost engagement and drive meaningful connections"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Marketing Consultation",
+                    "description": "Data-driven marketing strategies for business growth"
+                  }
+                }
+              ]
+            }
+          })
+        }}
+      />
       {/* Hero Section */}
       <section ref={ref} className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
         <motion.div
@@ -158,7 +216,7 @@ export default function Home() {
                 />
                 <div className="relative bg-background rounded-2xl overflow-hidden shadow-xl">
                   <Image
-                    src="/hero-image.jpg?height=500&width=600"
+                    src="/hero-image.webp?height=500&width=600"
                     alt="Digital Marketing Dashboard"
                     width={600}
                     height={500}
@@ -282,10 +340,10 @@ export default function Home() {
                 />
                 <div className="relative grid grid-cols-2 gap-4">
                   <div className="space-y-4">
-                    <div className="bg-muted rounded-lg overflow-hidden h-40">
+                    <div className="bg-muted rounded-lg overflow-hidden h-64">
                       <Image
-                        src="/placeholder.svg?height=160&width=240"
-                        alt="Team collaboration"
+                        src="/about-1.webp"
+                        alt="Lynk Digital's professional web development and design workspace showcasing modern technology solutions"
                         width={240}
                         height={160}
                         className="w-full h-full object-cover"
@@ -293,8 +351,8 @@ export default function Home() {
                     </div>
                     <div className="bg-muted rounded-lg overflow-hidden h-64">
                       <Image
-                        src="/placeholder.svg?height=256&width=240"
-                        alt="Design process"
+                        src="/about-2.png"
+                        alt="Lynk Digital's creative team collaborating on UI/UX design projects and digital marketing strategies"
                         width={240}
                         height={256}
                         className="w-full h-full object-cover"
@@ -304,17 +362,17 @@ export default function Home() {
                   <div className="space-y-4 mt-8">
                     <div className="bg-muted rounded-lg overflow-hidden h-64">
                       <Image
-                        src="/placeholder.svg?height=256&width=240"
-                        alt="Creative workspace"
+                        src="/about-3.webp"
+                        alt="Lynk Digital's innovative social media marketing and brand development process in action"
                         width={240}
                         height={256}
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="bg-muted rounded-lg overflow-hidden h-40">
+                    <div className="bg-muted rounded-lg overflow-hidden h-64">
                       <Image
-                        src="/placeholder.svg?height=160&width=240"
-                        alt="Digital marketing"
+                        src="/about-4.webp"
+                        alt="Lynk Digital's data-driven marketing consultation and digital strategy implementation"
                         width={240}
                         height={160}
                         className="w-full h-full object-cover"

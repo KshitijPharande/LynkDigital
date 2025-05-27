@@ -35,22 +35,22 @@ export default function Footer() {
               solutions.
             </p>
             <div className="flex space-x-4">
-              <Link href="#" className="text-white/60 hover:text-lynk-blue transition-colors">
+              {/* <Link href="#" className="text-white/60 hover:text-lynk-blue transition-colors">
                 <Facebook size={20} />
                 <span className="sr-only">Facebook</span>
-              </Link>
-              <Link href="#" className="text-white/60 hover:text-lynk-blue transition-colors">
+              </Link> */}
+              {/* <Link href="#" className="text-white/60 hover:text-lynk-blue transition-colors">
                 <Twitter size={20} />
                 <span className="sr-only">Twitter</span>
-              </Link>
+              </Link> */}
               <Link href="#" className="text-white/60 hover:text-lynk-blue transition-colors">
                 <Instagram size={20} />
                 <span className="sr-only">Instagram</span>
               </Link>
-              <Link href="#" className="text-white/60 hover:text-lynk-blue transition-colors">
+              {/* <Link href="#" className="text-white/60 hover:text-lynk-blue transition-colors">
                 <Linkedin size={20} />
                 <span className="sr-only">LinkedIn</span>
-              </Link>
+              </Link> */}
             </div>
           </motion.div>
 
@@ -144,10 +144,10 @@ export default function Footer() {
           >
             <h3 className="text-lg font-semibold text-lynk-blue">Contact Us</h3>
             <ul className="space-y-3">
-              <li className="flex items-start space-x-3">
+              {/* <li className="flex items-start space-x-3">
                 <MapPin size={18} className="text-lynk-blue mt-0.5 flex-shrink-0" />
                 <span className="text-sm text-white/80">123 Digital Avenue, Tech City, 10001</span>
-              </li>
+              </li> */}
               <li className="flex items-center space-x-3">
                 <Phone size={18} className="text-lynk-blue flex-shrink-0" />
                 <span className="text-sm text-white/80">(+91) 8010195467</span>

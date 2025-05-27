@@ -103,13 +103,13 @@ export default function ContactPage() {
       description: "Monday to Friday, 9am to 5pm IST",
       href: "tel:+918010195467",
     },
-    {
-    icon: <FaWhatsapp className="h-6 w-6 text-primary" />,
-    title: "Message Us",
-    details: "+91 99306 32999", // Updated to the new number
-    description: "Available on WhatsApp for Consultation",
-    href: "https://wa.me/+919930632999?text=Hey%20I%27m%20Interested%20in%20your%20Service" // Updated with the new number
-    },
+  {
+  icon: <FaWhatsapp className="h-6 w-6 text-primary" />,
+  title: "Message Us",
+  details: "+91 99306 32999",
+  description: "Available on WhatsApp for Consultation",
+  href: "https://wa.me/+919930632999?text=Hello%2C%20I%20am%20interested%20in%20exploring%20Lynk%20Digital%27s%20services%20for%20my%20project.%20Could%20we%20discuss%20how%20your%20team%20can%20assist%20with%20web%20design%20and%20digital%20solutions%3F"
+},
     {
       icon: <FaInstagram className="h-6 w-6 text-primary" />,
       title: "Instagram",

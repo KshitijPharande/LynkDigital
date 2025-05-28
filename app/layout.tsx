@@ -68,6 +68,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+    <head>
+     <link rel="icon" href="/lynkdigital.svg" type="image/svg+xml" /> 
+    </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark" disableTransitionOnChange>
           <Header />

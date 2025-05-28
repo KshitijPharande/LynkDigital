@@ -27,28 +27,28 @@ export default function AboutPage() {
 
   const teamMembers = [
     {
-      name: "Alex Johnson",
-      role: "Founder & CEO",
-      bio: "With over 15 years of experience in digital marketing and web development, Alex leads our team with vision and expertise.",
-      image: "/placeholder.svg?height=300&width=300",
+      name: "Roma Devadhar",
+      role: "Co-Founder and CEO",
+      bio: "As Co-Founder and CEO, Roma leads Lynk Digital with a strategic vision, guiding businesses through the digital chaos with innovative solutions. She fosters real relationships to drive growth, ensuring the company remains a trusted partner for brands seeking impactful results.",
+      image: "/roma.webp",
     },
     {
-      name: "Samantha Lee",
-      role: "Creative Director",
-      bio: "Samantha brings her award-winning design background to create stunning visual experiences that captivate and convert.",
-      image: "/placeholder.svg?height=300&width=300",
+      name: "Swarada Mhetre",
+      role: "Co-Founder and CFO",
+      bio: "As Co-Founder and CFO, Swarada co-founded Lynk Digital with a vision for authentic marketing, ensuring financial strategies support elegant execution. She crafts impactful digital experiences for brands, blending fiscal discipline with creative clarity for timeless relevance.",
+      image: "/swarada.webp",
     },
     {
-      name: "David Chen",
+      name: "Kshitij Pharande",
       role: "Technical Lead",
-      bio: "David's expertise in cutting-edge web technologies ensures our clients receive innovative and scalable solutions.",
-      image: "/placeholder.svg?height=300&width=300",
+      bio: "As Technical Lead, Kshitij leverages his expertise in cutting-edge web technologies to ensure our clients receive innovative and scalable solutions.",
+      image: "/kshitij.webp",
     },
     {
-      name: "Maya Patel",
-      role: "Marketing Strategist",
-      bio: "Maya crafts data-driven marketing strategies that help our clients achieve measurable growth and engagement.",
-      image: "/placeholder.svg?height=300&width=300",
+      name: "Harshita Ghate",
+      role: "Senior content Editor",
+      bio: "As Senior Content Editor, Harshita creates and refines compelling content that aligns with brand goals, ensuring clarity, engagement, and a consistent voice across all digital platforms.",
+      image: "/harshita.webp",
     },
   ]
 
@@ -77,8 +77,8 @@ export default function AboutPage() {
   const founders = [
     {
       name: "Roma Devadhar",
-      role: "Co-Founder and Director",
-      image: "/roma.png",
+      role: "Co-Founder and CEO",
+      image: "/roma.webp",
       message:
         "When I founded this company at 19, it wasn't just about building websites or running campaigns, it was about creating a space where businesses could find clarity in the chaos of the digital world. A place where innovation meets intention. We believe real results come from real relationships. As we grow, our commitment stays the same: to be the digital partner you can trust, every step of the way. Let's build something great together.",
       socialLinks: [
@@ -87,8 +87,8 @@ export default function AboutPage() {
     },
     {
       name: "Swarada Mhetre",
-      role: "Co-Founder and Director",
-      image: "/swarada.png",
+      role: "Co-Founder and CFO",
+      image: "/swarada.webp",
       message:
         "We started Lynk Digital at 20 not because I had it all figured out — but because I saw something most agencies were missing: authenticity with an edge. In a space flooded with formulas and trends, I wanted to create a marketing agency that felt intentional, elevated, and quietly powerful. One that understood the digital world isn't just about being loud — it's about being undeniable. Lynk Digital was built for brands that want more than likes. Brands that crave identity, clarity, and timeless relevance. We blend smart strategy with elegant execution — and we never do average. This isn't just a business. It's a movement — proof that age doesn't define expertise, and great ideas don't need decades. Just vision, discipline, and the courage to build differently.Welcome to Lynk Digital. For the brands that don't follow. They lead",
       socialLinks: [
@@ -441,7 +441,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      {/* <section className="py-20 bg-muted/30">
+      <section className="py-20 bg-muted/30">
         <div className="container px-4 mx-auto">
           <motion.div
             className="text-center max-w-3xl mx-auto mb-16"
@@ -489,7 +489,7 @@ export default function AboutPage() {
             ))}
           </motion.div>
         </div>
-      </section> */}
+      </section>
 
       {/* CTA Section */}
       <section className="py-20">

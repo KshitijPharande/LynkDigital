@@ -52,7 +52,7 @@ export default function Home() {
     },
     {
       title: "Marketing Consultation",
-      description: "to be updated",
+      description: "Expert insights and actionable strategies to grow your online presence.",
       icon: <BarChart className="h-10 w-10 text-lynk-blue" />,
     },
   ]

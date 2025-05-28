@@ -274,7 +274,33 @@ export default function ServicesPage() {
               with your audience.
             </p>
           </motion.div>
-
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "itemListElement": services.map((service, index) => ({
+                  "@type": "Service",
+                  "position": index + 1,
+                  "name": service.title,
+                  "description": service.description,
+                  "provider": {
+                    "@type": "Organization",
+                    "name": "Lynk Digital",
+                    "url": "https://lynkdigital.co.in"
+                  },
+                  "serviceType": service.title,
+                  "url": `https://lynkdigital.co.in/services#${service.id}`,
+                  "image": `https://lynkdigital.co.in${service.image}`,
+                  "offers": {
+                    "@type": "Offer",
+                    "availability": "https://schema.org/InStock"
+                  }
+                }))
+              })
+            }}
+          />
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={staggerContainer}

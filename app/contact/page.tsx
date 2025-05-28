@@ -472,6 +472,57 @@ export default function ContactPage() {
               Find answers to common questions about our services and process.
             </p>
           </motion.div>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "What is your typical process for a new project?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Our process typically includes discovery, strategy, design, development, testing, and launch phases. We start by understanding your business goals and target audience, then develop a tailored strategy to achieve your objectives."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "How long does it take to complete a website?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Project timelines vary depending on complexity and scope. A simple website might take 4-6 weeks, while more complex projects can take 3-6 months. We'll provide a detailed timeline during our initial consultation."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Do you offer ongoing maintenance and support?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes, we offer various maintenance and support packages to keep your digital assets secure, up-to-date, and performing optimally. We can discuss these options based on your specific needs."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "What is your pricing structure?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Our pricing is project-based and depends on the scope, complexity, and timeline. We provide detailed proposals with transparent pricing after our initial consultation and understanding of your requirements."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Can you help with content creation?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes, we offer content strategy and creation services including copywriting, photography, and video production to ensure your digital presence effectively communicates your brand message."
+                    }
+                  }
+                ]
+              })
+            }}
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto ">
             {[
               {

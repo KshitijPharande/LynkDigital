@@ -69,8 +69,137 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
     <head>
+     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <meta name="format-detection" content="telephone=no" />
+     <meta name="image" content="https://lynkdigital.co.in/og-image.jpg" />
+     <meta property="og:image:width" content="1200" />
+     <meta property="og:image:height" content="630" />
+     <meta property="og:image:alt" content="Lynk Digital - Modern Digital Solutions" />
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+     <link rel="preload" href="/lynkdigital.svg" as="image" type="image/svg+xml" />
+     <link rel="preload" href="/lynk-logo.jpg" as="image" type="image/jpeg" />
+     <meta name="theme-color" content="#000000" />
      <link rel="icon" href="/lynkdigital.svg" type="image/svg+xml" /> 
      <link rel="shortcut icon" href="/lynkdigital.svg" type="image/svg+xml" />
+     <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Lynk Digital",
+            "url": "https://lynkdigital.co.in",
+            "logo": "https://lynkdigital.co.in/lynkdigital.svg",
+            "description": "Transform your digital presence with expert web design, UI/UX, and digital marketing services.",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "IN"
+            },
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+91-8010195467",
+              "contactType": "customer service",
+              "email": "hello@lynkdigital.co.in"
+            },
+            "sameAs": [
+              "https://www.instagram.com/lynk.digital_?igsh=Zm5jazNleGlqZDg3"
+            ]
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://lynkdigital.co.in"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Services",
+                "item": "https://lynkdigital.co.in/services"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "About",
+                "item": "https://lynkdigital.co.in/about"
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Contact",
+                "item": "https://lynkdigital.co.in/contact"
+              }
+            ]
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://lynkdigital.co.in",
+            "name": "Lynk Digital",
+            "description": "Transform your digital presence with expert web design, UI/UX, and digital marketing services.",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://lynkdigital.co.in/search?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "Lynk Digital",
+            "image": "https://lynkdigital.co.in/lynk-logo.jpg",
+            "url": "https://lynkdigital.co.in",
+            "@id": "https://lynkdigital.co.in",
+            "telephone": "+91-8010195467",
+            "email": "hello@lynkdigital.co.in",
+            "priceRange": "₹₹",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "IN"
+            },
+            "geo": {
+              "@type": "GeoCoordinates"
+            },
+            "openingHoursSpecification": {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday"
+              ],
+              "opens": "09:00",
+              "closes": "17:00"
+            },
+            "sameAs": [
+              "https://www.instagram.com/lynk.digital_?igsh=Zm5jazNleGlqZDg3"
+            ]
+          })
+        }}
+      />
     </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark" disableTransitionOnChange>

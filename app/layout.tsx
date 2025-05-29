@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     description: 'Transform your digital presence with expert web design, UI/UX, and digital marketing services. Custom solutions for modern businesses.',
     images: [
       {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
+        url: '/lynk-logo.webp',
+        width: 500,
+        height: 500,
         alt: 'Lynk Digital - Modern Digital Solutions',
       },
     ],
@@ -71,9 +71,9 @@ export default function RootLayout({
     <head>
      <meta name="viewport" content="width=device-width, initial-scale=1" />
      <meta name="format-detection" content="telephone=no" />
-     <meta name="image" content="https://lynkdigital.co.in/og-image.jpg" />
-     <meta property="og:image:width" content="1200" />
-     <meta property="og:image:height" content="630" />
+     <meta name="image" content="https://lynkdigital.co.in/lynk-logo.webp" />
+     <meta property="og:image:width" content="500" />
+     <meta property="og:image:height" content="500" />
      <meta property="og:image:alt" content="Lynk Digital - Modern Digital Solutions" />
      <link rel="preconnect" href="https://fonts.googleapis.com" />
      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -84,6 +84,8 @@ export default function RootLayout({
      <meta name="theme-color" content="#000000" />
      <link rel="icon" href="/lynkdigital.svg" type="image/svg+xml" /> 
      <link rel="shortcut icon" href="/lynkdigital.svg" type="image/svg+xml" />
+     <link rel="apple-touch-icon" href="/lynk-logo.png" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/lynk-logo.png" />
      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

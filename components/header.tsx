@@ -53,7 +53,7 @@ export default function Header() {
           <Link href="/" className="flex items-center">
             <div className="relative">
               <Image
-                src="/lynk-logo.jpg"
+                src="/lynk-logo.webp"
                 alt="Lynk Digital Logo"
                 width={50}
                 height={50}

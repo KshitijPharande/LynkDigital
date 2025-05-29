@@ -277,7 +277,7 @@ export default function ContactPage() {
                     // Web3Forms Integration
                     <form onSubmit={handleSubmit} action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
                       <input type="hidden" name="access_key" value="b445c2f1-7a8e-414d-8cfa-956cc15b207d" />
-                      <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
+                      <input type="checkbox" name="botcheck" className="hidden" />
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">

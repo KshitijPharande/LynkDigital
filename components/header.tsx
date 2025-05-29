@@ -58,6 +58,7 @@ export default function Header() {
                 width={50}
                 height={50}
                 className="h-12 w-12 rounded-full object-cover"
+                priority
               />
             </div>
             <span className="ml-3 text-xl font-bold text-lynk-navy dark:text-lynk-blue">Lynk Digital</span>

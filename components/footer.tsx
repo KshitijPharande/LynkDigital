@@ -22,7 +22,7 @@ export default function Footer() {
           >
             <Link href="/" className="inline-flex items-center">
               <Image
-                src="/lynk-logo.jpg"
+                src="/lynk-logo.webp"
                 alt="Lynk Digital Logo"
                 width={40}
                 height={40}

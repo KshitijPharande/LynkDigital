@@ -91,8 +91,8 @@ export default function Home() {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Lynk Digital",
-            "url": "https://lynkdigital.com",
-            "logo": "https://lynkdigital.com/logo.png",
+            "url": "https://lynkdigital.co.in",
+            "logo": "https://lynkdigital.co.in/lynk-logo.webp",
             "description": "Digital agency specializing in web development, UI/UX design, and digital marketing solutions",
             "sameAs": [
               "https://twitter.com/lynkdigital",

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     description: 'Transform your digital presence with expert web design, UI/UX, and digital marketing services. Custom solutions for modern businesses.',
     images: [
       {
-        url: '/lynk-logo.webp',
+        url: 'https://lynkdigital.co.in/lynk-logo.webp',
         width: 500,
         height: 500,
         alt: 'Lynk Digital - Modern Digital Solutions',
@@ -72,6 +72,7 @@ export default function RootLayout({
      <meta name="viewport" content="width=device-width, initial-scale=1" />
      <meta name="format-detection" content="telephone=no" />
      <meta name="image" content="https://lynkdigital.co.in/lynk-logo.webp" />
+     <meta property="og:image" content="https://lynkdigital.co.in/lynk-logo.webp" />
      <meta property="og:image:width" content="500" />
      <meta property="og:image:height" content="500" />
      <meta property="og:image:alt" content="Lynk Digital - Modern Digital Solutions" />
@@ -94,7 +95,13 @@ export default function RootLayout({
             "@type": "Organization",
             "name": "Lynk Digital",
             "url": "https://lynkdigital.co.in",
-            "logo": "https://lynkdigital.co.in/lynkdigital.svg",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://lynkdigital.co.in/lynk-logo.webp",
+              "width": 500,
+              "height": 500,
+              "caption": "Lynk Digital Logo"
+            },
             "description": "Transform your digital presence with expert web design, UI/UX, and digital marketing services.",
             "address": {
               "@type": "PostalAddress",

@@ -76,6 +76,12 @@ export default function RootLayout({
      <meta property="og:image:width" content="500" />
      <meta property="og:image:height" content="500" />
      <meta property="og:image:alt" content="Lynk Digital - Modern Digital Solutions" />
+     <meta name="twitter:card" content="summary_large_image" />
+     <meta name="twitter:site" content="@lynkdigital" />
+     <meta name="twitter:title" content="Lynk Digital | Transform Your Digital Presence" />
+     <meta name="twitter:description" content="Transform your digital presence with expert web design, UI/UX, and digital marketing services. Custom solutions for modern businesses." />
+     <meta name="twitter:image" content="https://lynkdigital.co.in/lynk-logo.webp" />
+     <meta name="twitter:image:alt" content="Lynk Digital - Modern Digital Solutions" />
      <link rel="preconnect" href="https://fonts.googleapis.com" />
      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
      <link rel="dns-prefetch" href="https://fonts.googleapis.com" />

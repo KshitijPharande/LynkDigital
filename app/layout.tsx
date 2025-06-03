@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: 'Lynk Digital | Transform Your Digital Presence',
     template: '%s | Lynk Digital'
   },
-  description: 'Transform your digital presence with Lynk Digital. Expert web design, UI/UX, digital marketing, and brand development services tailored for modern businesses.',
+  description: 'Transform your digital presence with Lynk Digital. Expert web design, UI/UX, digital marketing, and brand development services in Mumbai, Maharashtra. Tailored solutions for modern businesses.',
   keywords: ['web design', 'digital marketing', 'UI/UX design', 'SEO services', 'social media marketing', 'brand development', 'digital strategy'],
   authors: [{ name: 'Lynk Digital' }],
   creator: 'Lynk Digital',
@@ -69,6 +69,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
     <head>
+      {/* Google tag (gtag.js) */}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL7RELQQCJ"></script>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-ZL7RELQQCJ');
+          `
+        }}
+      />
      <meta name="viewport" content="width=device-width, initial-scale=1" />
      <meta name="format-detection" content="telephone=no" />
      <meta name="image" content="https://lynkdigital.co.in/lynk-logo.webp" />
@@ -184,33 +196,43 @@ export default function RootLayout({
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             "name": "Lynk Digital",
-            "image": "https://lynkdigital.co.in/lynk-logo.jpg",
+            "image": "https://lynkdigital.co.in/lynk-logo.webp",
             "url": "https://lynkdigital.co.in",
             "@id": "https://lynkdigital.co.in",
             "telephone": "+91-8010195467",
             "email": "hello@lynkdigital.co.in",
             "priceRange": "₹₹",
+            "additionalType": [
+              "https://schema.org/WebDesign",
+              "https://schema.org/MarketingAgency",
+              "https://schema.org/DigitalService"
+            ],
+            "knowsAbout": [
+              "Web Design",
+              "Digital Marketing",
+              "UI/UX Design",
+              "Social Media Marketing",
+              "SEO Services",
+              "Brand Development"
+            ],
             "address": {
               "@type": "PostalAddress",
-              "addressCountry": "IN"
+              "addressCountry": "IN",
+              "addressRegion": "Maharashtra",
+              "addressLocality": "Mumbai"
             },
-            "geo": {
-              "@type": "GeoCoordinates"
-            },
-            "openingHoursSpecification": {
-              "@type": "OpeningHoursSpecification",
-              "dayOfWeek": [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday"
-              ],
-              "opens": "09:00",
-              "closes": "17:00"
+            "areaServed": {
+              "@type": "GeoCircle",
+              "geoMidpoint": {
+                "@type": "GeoCoordinates",
+                "latitude": "19.0760",
+                "longitude": "72.8777"
+              },
+              "geoRadius": "50000"
             },
             "sameAs": [
-              "https://www.instagram.com/lynk.digital_?igsh=Zm5jazNleGlqZDg3"
+              "https://www.instagram.com/lynk.digital_?igsh=Zm5jazNleGlqZDg3",
+              "https://www.google.com/business/profile/YOUR_GOOGLE_BUSINESS_ID"
             ]
           })
         }}

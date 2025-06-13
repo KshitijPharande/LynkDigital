@@ -3,14 +3,14 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs').promises;
 
-// Function to convert image to base64
-const getBase64Image = async () => {
+// Function to read SVG file
+const getSVGLogo = async () => {
   try {
-    const imagePath = path.join(__dirname, '../public/lynk-logo.webp');
-    const imageBuffer = await fs.readFile(imagePath);
-    return `data:image/webp;base64,${imageBuffer.toString('base64')}`;
+    const svgPath = path.join(__dirname, '../public/lynkdigital.svg');
+    const svgContent = await fs.readFile(svgPath, 'utf8');
+    return `data:image/svg+xml;base64,${Buffer.from(svgContent).toString('base64')}`;
   } catch (error) {
-    console.error('Error reading image:', error);
+    console.error('Error reading SVG:', error);
     return null;
   }
 };
@@ -57,11 +57,11 @@ exports.getInvoicePDF = async (req, res) => {
     const invoice = await Invoice.findById(req.params.id);
     if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
 
-    // Get base64 image
-    const base64Image = await getBase64Image();
-    if (!base64Image) {
-      console.error('Failed to load logo image');
-      return res.status(500).json({ message: 'Failed to load logo image' });
+    // Get SVG logo
+    const logoBase64 = await getSVGLogo();
+    if (!logoBase64) {
+      console.error('Failed to load logo');
+      return res.status(500).json({ message: 'Failed to load logo' });
     }
 
     // HTML template for the invoice with new UI design
@@ -269,7 +269,7 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Header -->
         <div class="header">
           <div class="logo-section">
-            <img src="${base64Image}" alt="Lynk Digital Logo" style="width: 60px; height: 60px; margin-right: 15px;" />
+            <img src="${logoBase64}" alt="Lynk Digital Logo" style="height: 50px; margin-right: 10px;">
             <div class="company-name">LYNK DIGITAL</div>
           </div>
           <div class="invoice-title">INVOICE</div>

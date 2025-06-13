@@ -41,10 +41,21 @@ exports.getInvoices = async (req, res) => {
 
 exports.getInvoicePDF = async (req, res) => {
   try {
+    console.log('Starting PDF generation process for invoice ID:', req.params.id);
+    
     const invoice = await Invoice.findById(req.params.id);
-    if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
+    if (!invoice) {
+      console.log('Invoice not found with ID:', req.params.id);
+      return res.status(404).json({ message: 'Invoice not found' });
+    }
+    console.log('Invoice found:', { 
+      id: invoice._id,
+      clientName: invoice.clientName,
+      totalAmount: invoice.fullAmount 
+    });
 
     // HTML template for the invoice with new UI design
+    console.log('Generating HTML template...');
     const html = `
     <!DOCTYPE html>
      <html>
@@ -344,39 +355,96 @@ exports.getInvoicePDF = async (req, res) => {
 </body>
 </html>
     `;
+    console.log('HTML template generated successfully');
 
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-gpu',
-        '--window-size=1920x1080'
-      ]
-    });
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20px',
-        right: '20px',
-        bottom: '20px',
-        left: '20px'
+    console.log('Launching Puppeteer browser...');
+    let browser;
+    try {
+      browser = await puppeteer.launch({
+        headless: "new",
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--disable-gpu',
+          '--window-size=1920x1080'
+        ],
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined
+      });
+    } catch (err) {
+      console.error('Failed to launch Puppeteer:', err);
+      throw new Error(`Failed to launch browser: ${err.message}`);
+    }
+    console.log('Browser launched successfully');
+
+    let page;
+    try {
+      console.log('Creating new page...');
+      page = await browser.newPage();
+      console.log('New page created');
+
+      console.log('Setting page content...');
+      await page.setContent(html, { waitUntil: 'networkidle0' });
+      console.log('Page content set successfully');
+
+      console.log('Generating PDF...');
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: '20px',
+          right: '20px',
+          bottom: '20px',
+          left: '20px'
+        }
+      });
+      console.log('PDF generated successfully, buffer size:', pdfBuffer.length);
+
+      console.log('Closing browser...');
+      await browser.close();
+      console.log('Browser closed successfully');
+
+      console.log('Setting response headers...');
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename=invoice-${invoice._id}.pdf`,
+      });
+      console.log('Response headers set');
+
+      console.log('Sending PDF response...');
+      res.send(pdfBuffer);
+      console.log('PDF response sent successfully');
+    } catch (err) {
+      console.error('Error during PDF generation:', {
+        message: err.message,
+        stack: err.stack,
+        name: err.name
+      });
+      
+      // Make sure to close the browser if it was opened
+      if (browser) {
+        try {
+          await browser.close();
+          console.log('Browser closed after error');
+        } catch (closeErr) {
+          console.error('Error closing browser after error:', closeErr);
+        }
       }
-    });
-    await browser.close();
-
-    res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename=invoice-${invoice._id}.pdf`,
-    });
-    res.send(pdfBuffer);
+      
+      throw err;
+    }
   } catch (err) {
-    res.status(500).json({ message: 'PDF generation error', error: err });
+    console.error('PDF generation error:', {
+      message: err.message,
+      stack: err.stack,
+      name: err.name
+    });
+    res.status(500).json({ 
+      message: 'PDF generation error', 
+      error: err.message,
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
   }
 };
 

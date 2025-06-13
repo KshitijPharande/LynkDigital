@@ -180,10 +180,23 @@ export default function InvoicesPage() {
 
   const handleDownloadPDF = async (invoiceId: string) => {
     try {
+      console.log('Starting PDF download for invoice:', invoiceId);
       const token = localStorage.getItem("token");
+      
+      console.log('Making API request to:', `${API_URL}/api/invoices/${invoiceId}/pdf`);
       const response = await axios.get(`${API_URL}/api/invoices/${invoiceId}/pdf`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Accept': 'application/pdf'
+        },
         responseType: 'blob'
+      });
+      
+      console.log('Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
+        dataSize: response.data.size
       });
       
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -194,9 +207,36 @@ export default function InvoicesPage() {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.data?.message || "Failed to download PDF", { position: "top-right" })
+      console.log('PDF download completed successfully');
+    } catch (error: any) {
+      console.error('PDF download error:', {
+        message: error?.message,
+        response: error?.response ? {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+          headers: error.response.headers
+        } : 'No response data',
+        config: error?.config
+      });
+      
+      // Try to read the error message from the response if it's a blob
+      if (error?.response?.data instanceof Blob) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const errorData = JSON.parse(reader.result as string);
+            console.error('Error details from server:', errorData);
+            toast.error(errorData?.message || "Failed to download PDF", { position: "top-right" });
+          } catch (e) {
+            console.error('Could not parse error response:', e);
+            toast.error("Failed to download PDF", { position: "top-right" });
+          }
+        };
+        reader.readAsText(error.response.data);
+      } else {
+        toast.error(error?.response?.data?.message || "Failed to download PDF", { position: "top-right" });
+      }
     }
   };
 

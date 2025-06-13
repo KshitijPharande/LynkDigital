@@ -96,12 +96,12 @@ export default function RootLayout({
      <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
      <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
      <link rel="preload" href="/lynkdigital.svg" as="image" type="image/svg+xml" />
-     <link rel="preload" href="/lynk-logo.jpg" as="image" type="image/jpeg" />
+     <link rel="preload" href="/lynk-logo.webp" as="image" type="image/webp" />
      <meta name="theme-color" content="#000000" />
      <link rel="icon" href="/lynkdigital.svg" type="image/svg+xml" /> 
      <link rel="shortcut icon" href="/lynkdigital.svg" type="image/svg+xml" />
-     <link rel="apple-touch-icon" href="/lynk-logo.png" />
-     <link rel="apple-touch-icon" sizes="180x180" href="/lynk-logo.png" />
+     <link rel="apple-touch-icon" href="/lynk-logo.webp" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/lynk-logo.webp" />
      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

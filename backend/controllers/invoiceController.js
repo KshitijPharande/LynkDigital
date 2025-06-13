@@ -248,7 +248,7 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Header -->
     <div class="header">
           <div class="logo-section">
-            <img src="http://localhost:3000/lynk-logo.webp" alt="Lynk Digital Logo" style="width: 60px; height: 60px; margin-right: 15px;" />
+            <img src="https://backendd.lynkdigital.co.in/lynk-logo.webp" alt="Lynk Digital Logo" style="width: 60px; height: 60px; margin-right: 15px;" />
             <div class="company-name">LYNK DIGITAL</div>
       </div>
       <div class="invoice-title">INVOICE</div>
@@ -345,10 +345,29 @@ exports.getInvoicePDF = async (req, res) => {
 </html>
     `;
 
-    const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox"] });
+    const browser = await puppeteer.launch({
+      headless: "new",
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+        '--window-size=1920x1080'
+      ]
+    });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
-    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: {
+        top: '20px',
+        right: '20px',
+        bottom: '20px',
+        left: '20px'
+      }
+    });
     await browser.close();
 
     res.set({

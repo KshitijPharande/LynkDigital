@@ -74,6 +74,10 @@ exports.getInvoicePDF = async (req, res) => {
     <head>
       <meta charset="UTF-8">
       <style>
+        @font-face {
+          font-family: 'Arial';
+          src: local('Arial');
+        }
         body { 
           font-family: Arial, sans-serif; 
           margin: 0; 
@@ -100,12 +104,15 @@ exports.getInvoicePDF = async (req, res) => {
         .logo-section { 
           display: flex; 
           align-items: center; 
+          background: #4A90E2;
+          padding: 10px 20px;
+          border-radius: 5px;
         }
         .company-name { 
-          font-size: 18px; 
+          font-size: 24px; 
           font-weight: bold; 
-          color: #333; 
-          margin-left: 10px;
+          color: white; 
+          letter-spacing: 1px;
         }
         .invoice-title { 
           font-size: 32px; 
@@ -273,7 +280,6 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Header -->
         <div class="header">
           <div class="logo-section">
-            ${LOGO_SVG}
             <div class="company-name">LYNK DIGITAL</div>
           </div>
           <div class="invoice-title">INVOICE</div>
@@ -377,7 +383,9 @@ exports.getInvoicePDF = async (req, res) => {
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-accelerated-2d-canvas',
-        '--disable-gpu'
+        '--disable-gpu',
+        '--no-zygote',
+        '--single-process'
       ],
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined
     });

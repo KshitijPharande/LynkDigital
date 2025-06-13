@@ -33,8 +33,8 @@ export default function AdminLogin() {
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token)
-        toast.success("Login successful")
-        router.push("/admin/leads")
+      toast.success("Login successful")
+      router.push("/admin/leads")
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed. Please try again.")

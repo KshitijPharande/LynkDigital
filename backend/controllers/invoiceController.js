@@ -47,9 +47,9 @@ exports.getInvoicePDF = async (req, res) => {
     // HTML template for the invoice with new UI design
     const html = `
     <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
+     <html>
+<head>
+  <style>
         body { 
           font-family: Arial, sans-serif; 
           margin: 0; 
@@ -134,10 +134,10 @@ exports.getInvoicePDF = async (req, res) => {
           background: #4A90E2;
           color: white;
           padding: 12px 8px;
-          text-align: center;
-          font-weight: bold;
+      text-align: center;
+      font-weight: bold;
           font-size: 12px;
-          letter-spacing: 0.5px;
+      letter-spacing: 0.5px;
           border: 1px solid #4A90E2;
         }
         td {
@@ -147,7 +147,7 @@ exports.getInvoicePDF = async (req, res) => {
           font-size: 13px;
           border-left: 1px solid #e0e0e0;
           border-right: 1px solid #e0e0e0;
-        }
+    }
         tbody tr:nth-child(even) {
           background: #E8F4FD;
           border-left: 1px solid #4A90E2;
@@ -167,11 +167,11 @@ exports.getInvoicePDF = async (req, res) => {
         
         /* Bottom Section */
         .bottom-section {
-          display: flex;
+      display: flex;
           justify-content: space-between;
           gap: 30px;
           margin-bottom: 40px;
-        }
+    }
         .payment-method {
           flex: 0.8;
           max-width: 300px;
@@ -184,39 +184,39 @@ exports.getInvoicePDF = async (req, res) => {
           background: #4A90E2;
           color: white;
           padding: 12px 15px;
-          font-weight: bold;
+      font-weight: bold;
           font-size: 12px;
-          letter-spacing: 0.5px;
+      letter-spacing: 0.5px;
           margin-bottom: 0;
-        }
+    }
         .section-content {
           padding: 15px;
           min-height: 60px;
-        }
+    }
         .grand-total-amount {
           font-size: 24px;
-          font-weight: bold;
+      font-weight: bold;
           color: #333;
           margin-top: 10px;
-        }
+    }
         
         /* Thank you and signature */
         .footer-section {
-          display: flex;
+      display: flex;
           flex-direction: column;
-          align-items: flex-end;
+      align-items: flex-end;
           margin-bottom: 40px;
           margin-top: 40px;
-        }
+    }
         .thank-you {
-          font-weight: bold;
+      font-weight: bold;
           color: #333;
           margin-bottom: 10px;
-        }
+    }
         .signature-name {
-          font-weight: bold;
+      font-weight: bold;
           margin-bottom: 5px;
-        }
+    }
         .signature-title {
           font-weight: bold;
           color: #666;
@@ -227,32 +227,32 @@ exports.getInvoicePDF = async (req, res) => {
         .contact-footer {
           border-top: 3px solid #4A90E2;
           padding-top: 20px;
-          display: flex;
-          justify-content: center;
-          gap: 60px;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
           color: #4A90E2;
           font-size: 13px;
-        }
+    }
         .contact-item {
           display: flex;
           align-items: center;
           gap: 8px;
-        }
+    }
         .contact-icon {
           font-size: 16px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
         <!-- Header -->
-        <div class="header">
+    <div class="header">
           <div class="logo-section">
             <img src="http://localhost:3000/lynk-logo.webp" alt="Lynk Digital Logo" style="width: 60px; height: 60px; margin-right: 15px;" />
             <div class="company-name">LYNK DIGITAL</div>
-          </div>
-          <div class="invoice-title">INVOICE</div>
-        </div>
+      </div>
+      <div class="invoice-title">INVOICE</div>
+    </div>
         
         <!-- Invoice Details -->
         <div class="invoice-details">
@@ -260,42 +260,42 @@ exports.getInvoicePDF = async (req, res) => {
             <h3>Invoice to :</h3>
             <div class="client-name">${invoice.companyName ? invoice.companyName : ''}</div>
             <div>${invoice.clientName}</div>
-            ${invoice.phone ? 'Contact: ' + invoice.phone + '<br/>' : ''}
-            ${invoice.email ? invoice.email + '<br/>' : ''}
-          </div>
+        ${invoice.phone ? 'Contact: ' + invoice.phone + '<br/>' : ''}
+        ${invoice.email ? invoice.email + '<br/>' : ''}
+      </div>
           <div class="invoice-meta">
-            <div><strong>Invoice no :</strong> ${invoice._id}</div>
-            <div><strong>Date-</strong> ${new Date(invoice.createdAt).toLocaleDateString()}</div>
-          </div>
-        </div>
+        <div><strong>Invoice no :</strong> ${invoice._id}</div>
+        <div><strong>Date-</strong> ${new Date(invoice.createdAt).toLocaleDateString()}</div>
+      </div>
+    </div>
         
         <!-- Table -->
         <div class="table-container">
-          <table>
+      <table>
             <thead>
-              <tr>
-                <th>NO</th>
-                <th>DESCRIPTION</th>
-                <th>QTY</th>
-                <th>PRICE</th>
-                <th>TOTAL</th>
-              </tr>
+        <tr>
+          <th>NO</th>
+          <th>DESCRIPTION</th>
+          <th>QTY</th>
+          <th>PRICE</th>
+          <th>TOTAL</th>
+        </tr>
             </thead>
             <tbody>
-              ${invoice.lineItems && invoice.lineItems.length > 0
-                ? invoice.lineItems.map((item, idx) => `
-                  <tr>
-                    <td>${idx + 1}</td>
-                    <td>${item.description || ''}</td>
-                    <td>${item.qty || 1}</td>
-                    <td>₹${item.price || item.amount || 0}</td>
-                    <td>₹${(item.qty ? item.qty * (item.price || item.amount || 0) : (item.price || item.amount || 0))}</td>
-                  </tr>
-                `).join('')
-                : `<tr><td colspan="5">No line items</td></tr>`}
+        ${invoice.lineItems && invoice.lineItems.length > 0
+          ? invoice.lineItems.map((item, idx) => `
+            <tr>
+              <td>${idx + 1}</td>
+              <td>${item.description || ''}</td>
+              <td>${item.qty || 1}</td>
+              <td>₹${item.price || item.amount || 0}</td>
+              <td>₹${(item.qty ? item.qty * (item.price || item.amount || 0) : (item.price || item.amount || 0))}</td>
+            </tr>
+          `).join('')
+          : `<tr><td colspan="5">No line items</td></tr>`}
             </tbody>
-          </table>
-        </div>
+      </table>
+    </div>
         
         <!-- Bottom Section -->
         <div class="bottom-section">
@@ -323,26 +323,26 @@ exports.getInvoicePDF = async (req, res) => {
           <div class="thank-you">Thank you for business with us!</div>
           <div class="signature-name">Swarada Mhetre</div>
           <div class="signature-title">CFO</div>
-        </div>
+      </div>
         
         <!-- Contact Footer -->
         <div class="contact-footer">
           <div class="contact-item">
             <span class="contact-icon">📞</span>
             <span>8010195467</span>
-          </div>
+      </div>
           <div class="contact-item">
             <span class="contact-icon">✉</span>
             <span>hello@lynkdigital.co.in</span>
-          </div>
+    </div>
           <div class="contact-item">
             <span class="contact-icon">📍</span>
             <span>Chintamani Apartments,<br>Sadashiv Peth, Pune</span>
-          </div>
-        </div>
-      </div>
-    </body>
-    </html>
+    </div>
+    </div>
+  </div>
+</body>
+</html>
     `;
 
     const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox"] });

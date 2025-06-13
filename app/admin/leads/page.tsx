@@ -105,13 +105,13 @@ export default function LeadsPage() {
       const response = await axiosInstance.post('/api/leads', formData);
       if (response.data) {
         toast.success("Lead added successfully", { position: "top-right" });
-        setFormData({
-          name: "",
-          phone: "",
-          email: "",
-          companyName: "",
-          address: "",
-          typeOfWork: "WebDev",
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        companyName: "",
+        address: "",
+        typeOfWork: "WebDev",
         });
         fetchLeads();
       }
@@ -148,19 +148,19 @@ export default function LeadsPage() {
 
     try {
       const response = await axiosInstance.put(`/api/leads/${acceptModalData.leadId}/accept`, {
-        startDate: acceptModalData.startDate,
-        deliveryDate: acceptModalData.deliveryDate,
+          startDate: acceptModalData.startDate,
+          deliveryDate: acceptModalData.deliveryDate,
       });
-      
+
       if (response.data) {
-        toast.success("Lead accepted and converted to client", { position: "top-right" });
-        setAcceptModalData({
-          isOpen: false,
-          leadId: null,
-          startDate: "",
-          deliveryDate: "",
-        });
-        fetchLeads();
+      toast.success("Lead accepted and converted to client", { position: "top-right" });
+      setAcceptModalData({
+        isOpen: false,
+        leadId: null,
+        startDate: "",
+        deliveryDate: "",
+      });
+      fetchLeads();
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to accept lead');

@@ -135,7 +135,7 @@ export default function ClientsPage() {
       const response = await axiosInstance.put(`${API_URL}/api/clients/${clientId}/terminate`);
       if (response.data) {
         toast.success('Client terminated successfully');
-        fetchClients();
+      fetchClients();
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to terminate client');
@@ -150,7 +150,7 @@ export default function ClientsPage() {
       const response = await axiosInstance.put(`${API_URL}/api/clients/${clientId}/status`, { status: "completed" });
       if (response.data) {
         toast.success('Project marked as completed');
-        fetchClients();
+      fetchClients();
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to mark as completed');
@@ -172,10 +172,10 @@ export default function ClientsPage() {
       });
       if (response.data) {
         toast.success('Payment proof uploaded successfully');
-        setSelectedFile(null);
-        setUploadMonth(null);
-        setUploadYear(null);
-        fetchClients();
+      setSelectedFile(null);
+      setUploadMonth(null);
+      setUploadYear(null);
+      fetchClients();
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to upload proof');
@@ -221,7 +221,7 @@ export default function ClientsPage() {
       const response = await axiosInstance.put(`${API_URL}/api/clients/${clientId}/restore`);
       if (response.data) {
         toast.success('Client restored successfully');
-        fetchClients();
+      fetchClients();
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to restore client');
@@ -234,7 +234,7 @@ export default function ClientsPage() {
       const response = await axiosInstance.delete(`${API_URL}/api/clients/${clientId}`);
       if (response.data) {
         toast.success('Client deleted successfully');
-        fetchClients();
+      fetchClients();
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to delete client');
@@ -256,8 +256,8 @@ export default function ClientsPage() {
       const response = await axiosInstance.put(`${API_URL}/api/clients/${editingClient._id}`, editFormData);
       if (response.data) {
         toast.success('Client updated successfully');
-        setEditingClient(null);
-        fetchClients();
+      setEditingClient(null);
+      fetchClients();
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to update client');

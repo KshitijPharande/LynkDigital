@@ -310,7 +310,7 @@ export default function ContactPage() {
                             <Input
                               id="phone"
                               name="phone"
-                              placeholder="+1 (555) 123-4567"
+                              placeholder="+91"
                               value={formState.phone}
                               onChange={handleChange}
                             />

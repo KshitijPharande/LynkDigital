@@ -3,16 +3,13 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs').promises;
 
-// Function to read SVG file
-const getSVGLogo = async () => {
-  try {
-    const svgPath = path.join(__dirname, '../public/lynkdigital.svg');
-    const svgContent = await fs.readFile(svgPath, 'utf8');
-    return `data:image/svg+xml;base64,${Buffer.from(svgContent).toString('base64')}`;
-  } catch (error) {
-    console.error('Error reading SVG:', error);
-    return null;
-  }
+// Function to get logo URL
+const getLogoUrl = () => {
+  // Use the deployed URL in production, local URL in development
+  const baseUrl = process.env.NODE_ENV === 'production' 
+    ? 'https://www.lynkdigital.co.in'
+    : 'http://localhost:3000';
+  return `${baseUrl}/lynkdigital.svg`;
 };
 
 exports.addInvoice = async (req, res) => {
@@ -57,12 +54,8 @@ exports.getInvoicePDF = async (req, res) => {
     const invoice = await Invoice.findById(req.params.id);
     if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
 
-    // Get SVG logo
-    const logoBase64 = await getSVGLogo();
-    if (!logoBase64) {
-      console.error('Failed to load logo');
-      return res.status(500).json({ message: 'Failed to load logo' });
-    }
+    // Get logo URL
+    const logoUrl = getLogoUrl();
 
     // HTML template for the invoice with new UI design
     const html = `
@@ -269,7 +262,7 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Header -->
         <div class="header">
           <div class="logo-section">
-            <img src="${logoBase64}" alt="Lynk Digital Logo" style="height: 50px; margin-right: 10px;">
+            <img src="${logoUrl}" alt="Lynk Digital Logo" style="height: 50px; margin-right: 10px;">
             <div class="company-name">LYNK DIGITAL</div>
           </div>
           <div class="invoice-title">INVOICE</div>

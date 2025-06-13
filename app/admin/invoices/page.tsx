@@ -40,6 +40,9 @@ interface Invoice {
   createdAt: string
   note?: string
   lineItems?: LineItem[]
+  bankName?: string
+  accountNumber?: string
+  paymentType?: string
 }
 
 interface LineItem {
@@ -61,6 +64,9 @@ export default function InvoicesPage() {
     advanceAmount: "",
     remainingBalance: "",
     fullAmount: "",
+    bankName: "",
+    accountNumber: "",
+    paymentType: "bank_transfer",
   })
   const [lineItems, setLineItems] = useState<LineItem[]>([{ description: "", amount: "" }]);
   const [note, setNote] = useState("");
@@ -78,6 +84,9 @@ export default function InvoicesPage() {
     fullAmount: "",
     note: "",
     lineItems: [{ description: "", amount: "" }],
+    bankName: "",
+    accountNumber: "",
+    paymentType: "bank_transfer",
   });
   const [viewInvoice, setViewInvoice] = useState<Invoice | null>(null);
   const [dateRange, setDateRange] = useState({
@@ -158,6 +167,9 @@ export default function InvoicesPage() {
         advanceAmount: "",
         remainingBalance: "",
         fullAmount: "",
+        bankName: "",
+        accountNumber: "",
+        paymentType: "bank_transfer",
       })
       setLineItems([{ description: "", amount: "" }])
       setNote("")
@@ -223,6 +235,9 @@ export default function InvoicesPage() {
       fullAmount: invoice.fullAmount.toString(),
       note: invoice.note || "",
       lineItems: invoice.lineItems || [{ description: "", amount: "" }],
+      bankName: invoice.bankName || "",
+      accountNumber: invoice.accountNumber || "",
+      paymentType: invoice.paymentType || "bank_transfer",
     });
   };
 
@@ -382,6 +397,41 @@ export default function InvoicesPage() {
                   value={note}
                   onChange={e => setNote(e.target.value)}
                   placeholder="Add a note (optional)"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="paymentType">Payment Type</Label>
+                <select
+                  id="paymentType"
+                  value={formData.paymentType}
+                  onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2"
+                >
+                  <option value="bank_transfer">Bank Transfer</option>
+                  <option value="cash">Cash</option>
+                  <option value="upi">UPI</option>
+                  <option value="cheque">Cheque</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="bankName">Bank Name</Label>
+                <Input
+                  id="bankName"
+                  value={formData.bankName}
+                  onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
+                  placeholder="Enter bank name"
+                  disabled={formData.paymentType !== "bank_transfer"}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="accountNumber">Account Number</Label>
+                <Input
+                  id="accountNumber"
+                  value={formData.accountNumber}
+                  onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })}
+                  placeholder="Enter account number"
+                  disabled={formData.paymentType !== "bank_transfer"}
                 />
               </div>
             </div>
@@ -603,6 +653,31 @@ export default function InvoicesPage() {
                 onChange={(e) => setEditFormData({ ...editFormData, note: e.target.value })}
                 placeholder="Note"
               />
+              <select
+                className="bg-zinc-800 text-white rounded-lg px-4 py-2 border border-zinc-700 focus:ring-2 focus:ring-blue-500"
+                value={editFormData.paymentType}
+                onChange={(e) => setEditFormData({ ...editFormData, paymentType: e.target.value })}
+              >
+                <option value="bank_transfer">Bank Transfer</option>
+                <option value="cash">Cash</option>
+                <option value="upi">UPI</option>
+                <option value="cheque">Cheque</option>
+                <option value="other">Other</option>
+              </select>
+              <Input
+                className="bg-zinc-800 text-white rounded-lg px-4 py-2 border border-zinc-700 focus:ring-2 focus:ring-blue-500"
+                value={editFormData.bankName}
+                onChange={(e) => setEditFormData({ ...editFormData, bankName: e.target.value })}
+                placeholder="Bank Name"
+                disabled={editFormData.paymentType !== "bank_transfer"}
+              />
+              <Input
+                className="bg-zinc-800 text-white rounded-lg px-4 py-2 border border-zinc-700 focus:ring-2 focus:ring-blue-500"
+                value={editFormData.accountNumber}
+                onChange={(e) => setEditFormData({ ...editFormData, accountNumber: e.target.value })}
+                placeholder="Account Number"
+                disabled={editFormData.paymentType !== "bank_transfer"}
+              />
               <div className="flex gap-4 mt-6">
                 <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2" onClick={handleUpdateInvoice}>Update</Button>
                 <Button className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg py-2" onClick={() => setEditingInvoice(null)}>Cancel</Button>
@@ -659,6 +734,22 @@ export default function InvoicesPage() {
                 <span className="font-semibold">Total:</span>
                 <span>₹{viewInvoice.fullAmount}</span>
               </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">Payment Type:</span>
+                <span>{viewInvoice.paymentType ? viewInvoice.paymentType.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : '-'}</span>
+              </div>
+              {viewInvoice.paymentType === 'bank_transfer' && (
+                <>
+                  <div className="flex justify-between">
+                    <span className="font-semibold">Bank Name:</span>
+                    <span>{viewInvoice.bankName || '-'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-semibold">Account Number:</span>
+                    <span>{viewInvoice.accountNumber || '-'}</span>
+                  </div>
+                </>
+              )}
               <div className="font-semibold mt-4">Line Items:</div>
               <ul className="mb-2">
                 {viewInvoice.lineItems && viewInvoice.lineItems.length > 0 ? (

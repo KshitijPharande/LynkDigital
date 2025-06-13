@@ -11,9 +11,9 @@ const invoiceSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   email: { type: String, required: true },
   companyName: { type: String },
-  advanceAmount: { type: Number },
-  remainingBalance: { type: Number },
-  fullAmount: { type: Number },
+  advanceAmount: { type: Number, required: true },
+  remainingBalance: { type: Number, required: true },
+  fullAmount: { type: Number, required: true },
   lineItems: [
     {
       description: String,
@@ -22,6 +22,9 @@ const invoiceSchema = new mongoose.Schema({
   ],
   createdAt: { type: Date, default: Date.now },
   note: { type: String },
+  bankName: String,
+  accountNumber: String,
+  paymentType: { type: String, enum: ['bank_transfer', 'cash', 'upi', 'cheque', 'other'], default: 'bank_transfer' },
 });
 
 module.exports = mongoose.model('Invoice', invoiceSchema); 

@@ -7,6 +7,10 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // Allow both HTTP and HTTPS
+  httpsAgent: new (require('https').Agent)({  
+    rejectUnauthorized: false
+  })
 });
 
 // Add a request interceptor to add the auth token

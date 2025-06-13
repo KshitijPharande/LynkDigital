@@ -59,12 +59,17 @@ exports.getInvoicePDF = async (req, res) => {
 
     // Get base64 image
     const base64Image = await getBase64Image();
+    if (!base64Image) {
+      console.error('Failed to load logo image');
+      return res.status(500).json({ message: 'Failed to load logo image' });
+    }
 
     // HTML template for the invoice with new UI design
     const html = `
     <!DOCTYPE html>
     <html>
     <head>
+      <meta charset="UTF-8">
       <style>
         body { 
           font-family: Arial, sans-serif; 
@@ -360,13 +365,29 @@ exports.getInvoicePDF = async (req, res) => {
     </html>
     `;
 
+    console.log('Launching browser...');
     const browser = await puppeteer.launch({ 
       headless: "new", 
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu'
+      ],
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined
     });
+
+    console.log('Creating new page...');
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    
+    console.log('Setting content...');
+    await page.setContent(html, { 
+      waitUntil: 'networkidle0',
+      timeout: 30000 
+    });
+
+    console.log('Generating PDF...');
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
@@ -377,8 +398,11 @@ exports.getInvoicePDF = async (req, res) => {
         left: '20px'
       }
     });
+
+    console.log('Closing browser...');
     await browser.close();
 
+    console.log('Sending response...');
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': `attachment; filename=invoice-${invoice._id}.pdf`,
@@ -386,7 +410,12 @@ exports.getInvoicePDF = async (req, res) => {
     res.send(pdfBuffer);
   } catch (err) {
     console.error('PDF generation error:', err);
-    res.status(500).json({ message: 'PDF generation error', error: err.message });
+    console.error('Error stack:', err.stack);
+    res.status(500).json({ 
+      message: 'PDF generation error', 
+      error: err.message,
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
   }
 };
 

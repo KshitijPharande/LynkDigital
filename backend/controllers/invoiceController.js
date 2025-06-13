@@ -1,22 +1,6 @@
 const Invoice = require('../models/Invoice');
 const puppeteer = require('puppeteer');
 const path = require('path');
-const fs = require('fs').promises;
-
-// Simple SVG logo
-const LOGO_SVG = `<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="25" cy="25" r="20" fill="#4A90E2"/>
-  <text x="25" y="30" font-family="Arial" font-size="20" fill="white" text-anchor="middle">L</text>
-</svg>`;
-
-// Function to get logo URL
-const getLogoUrl = () => {
-  // Use the deployed URL in production, local URL in development
-  const baseUrl = process.env.NODE_ENV === 'production' 
-    ? 'https://www.lynkdigital.co.in'
-    : 'http://localhost:3000';
-  return `${baseUrl}/lynkdigital.svg`;
-};
 
 exports.addInvoice = async (req, res) => {
   try {
@@ -56,28 +40,16 @@ exports.getInvoices = async (req, res) => {
 };
 
 exports.getInvoicePDF = async (req, res) => {
-  let browser;
   try {
-    console.log('Starting PDF generation...');
-    console.log('Finding invoice...');
     const invoice = await Invoice.findById(req.params.id);
-    if (!invoice) {
-      console.log('Invoice not found');
-      return res.status(404).json({ message: 'Invoice not found' });
-    }
-    console.log('Invoice found:', invoice._id);
+    if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
 
     // HTML template for the invoice with new UI design
     const html = `
     <!DOCTYPE html>
     <html>
     <head>
-      <meta charset="UTF-8">
       <style>
-        @font-face {
-          font-family: 'Arial';
-          src: local('Arial');
-        }
         body { 
           font-family: Arial, sans-serif; 
           margin: 0; 
@@ -104,15 +76,11 @@ exports.getInvoicePDF = async (req, res) => {
         .logo-section { 
           display: flex; 
           align-items: center; 
-          background: #4A90E2;
-          padding: 10px 20px;
-          border-radius: 5px;
         }
         .company-name { 
-          font-size: 24px; 
+          font-size: 18px; 
           font-weight: bold; 
-          color: white; 
-          letter-spacing: 1px;
+          color: #333; 
         }
         .invoice-title { 
           font-size: 32px; 
@@ -280,6 +248,7 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Header -->
         <div class="header">
           <div class="logo-section">
+            <img src="http://localhost:3000/lynk-logo.webp" alt="Lynk Digital Logo" style="width: 60px; height: 60px; margin-right: 15px;" />
             <div class="company-name">LYNK DIGITAL</div>
           </div>
           <div class="invoice-title">INVOICE</div>
@@ -288,14 +257,15 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Invoice Details -->
         <div class="invoice-details">
           <div class="invoice-to">
-            <h3>Invoice to:</h3>
-            <div class="client-name">${invoice.clientName}</div>
-            ${invoice.phone ? `<div>Contact: ${invoice.phone}</div>` : ''}
-            ${invoice.email ? `<div>${invoice.email}</div>` : ''}
+            <h3>Invoice to :</h3>
+            <div class="client-name">${invoice.companyName ? invoice.companyName : ''}</div>
+            <div>${invoice.clientName}</div>
+            ${invoice.phone ? 'Contact: ' + invoice.phone + '<br/>' : ''}
+            ${invoice.email ? invoice.email + '<br/>' : ''}
           </div>
           <div class="invoice-meta">
-            <div><strong>Invoice no:</strong> ${invoice._id}</div>
-            <div><strong>Date:</strong> ${new Date(invoice.createdAt).toLocaleDateString()}</div>
+            <div><strong>Invoice no :</strong> ${invoice._id}</div>
+            <div><strong>Date-</strong> ${new Date(invoice.createdAt).toLocaleDateString()}</div>
           </div>
         </div>
         
@@ -330,18 +300,18 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Bottom Section -->
         <div class="bottom-section">
           <div class="payment-method">
-            <div class="section-header">PAYMENT METHOD:</div>
+            <div class="section-header">PAYMENT METHOD :</div>
             <div class="section-content">
               ${invoice.paymentType === 'bank_transfer' ? `
-                <div>Bank Name: ${invoice.bankName || 'Not provided'}</div>
-                <div>Account Number: ${invoice.accountNumber || 'Not provided'}</div>
+                <div>Bank Name : ${invoice.bankName || 'Not provided'}</div>
+                <div>Account Number : ${invoice.accountNumber || 'Not provided'}</div>
               ` : `
-                <div>Payment Type: ${invoice.paymentType.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</div>
+                <div>Payment Type : ${invoice.paymentType.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</div>
               `}
             </div>
           </div>
           <div class="grand-total">
-            <div class="section-header">GRAND TOTAL:</div>
+            <div class="section-header">GRAND TOTAL :</div>
             <div class="section-content">
               <div class="grand-total-amount">₹${invoice.fullAmount || 0}</div>
             </div>
@@ -375,61 +345,19 @@ exports.getInvoicePDF = async (req, res) => {
     </html>
     `;
 
-    console.log('Launching browser...');
-    browser = await puppeteer.launch({ 
-      headless: "new", 
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-gpu',
-        '--no-zygote',
-        '--single-process'
-      ],
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined
-    });
-
-    console.log('Creating new page...');
+    const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox"] });
     const page = await browser.newPage();
-    
-    console.log('Setting content...');
-    await page.setContent(html, { 
-      waitUntil: 'networkidle0',
-      timeout: 30000 
-    });
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+    await browser.close();
 
-    console.log('Generating PDF...');
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20px',
-        right: '20px',
-        bottom: '20px',
-        left: '20px'
-      }
-    });
-
-    console.log('PDF generated successfully');
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': `attachment; filename=invoice-${invoice._id}.pdf`,
     });
     res.send(pdfBuffer);
   } catch (err) {
-    console.error('PDF generation error:', err);
-    console.error('Error stack:', err.stack);
-    res.status(500).json({ 
-      message: 'PDF generation error', 
-      error: err.message,
-      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
-    });
-  } finally {
-    if (browser) {
-      console.log('Closing browser...');
-      await browser.close();
-    }
+    res.status(500).json({ message: 'PDF generation error', error: err });
   }
 };
 

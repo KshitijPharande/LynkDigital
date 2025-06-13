@@ -27,6 +27,7 @@ import { motion } from "framer-motion"
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import axiosInstance from '../../lib/axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -85,16 +86,10 @@ export default function LeadsPage() {
 
   const fetchLeads = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch(`${API_URL}/api/leads`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      const data = await response.json()
-      setLeads(data)
+      const response = await axiosInstance.get('/api/leads');
+      setLeads(response.data);
     } catch (error) {
-      toast.error("Failed to fetch leads", { position: "top-right" })
+      console.error('Error fetching leads:', error);
     }
   }
 
@@ -107,32 +102,21 @@ export default function LeadsPage() {
     setIsLoading(true)
 
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch(`${API_URL}/api/leads`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to add lead")
+      const response = await axiosInstance.post('/api/leads', formData);
+      if (response.data) {
+        toast.success("Lead added successfully", { position: "top-right" });
+        setFormData({
+          name: "",
+          phone: "",
+          email: "",
+          companyName: "",
+          address: "",
+          typeOfWork: "WebDev",
+        });
+        fetchLeads();
       }
-
-      toast.success("Lead added successfully", { position: "top-right" })
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        companyName: "",
-        address: "",
-        typeOfWork: "WebDev",
-      })
-      fetchLeads()
     } catch (error) {
-      toast.error("Failed to add lead", { position: "top-right" })
+      toast.error("Failed to add lead", { position: "top-right" });
     } finally {
       setIsLoading(false)
     }
@@ -163,79 +147,49 @@ export default function LeadsPage() {
     }
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/leads/${acceptModalData.leadId}/accept`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          startDate: acceptModalData.startDate,
-          deliveryDate: acceptModalData.deliveryDate,
-        }),
+      const response = await axiosInstance.put(`/api/leads/${acceptModalData.leadId}/accept`, {
+        startDate: acceptModalData.startDate,
+        deliveryDate: acceptModalData.deliveryDate,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to accept lead");
+      
+      if (response.data) {
+        toast.success("Lead accepted and converted to client", { position: "top-right" });
+        setAcceptModalData({
+          isOpen: false,
+          leadId: null,
+          startDate: "",
+          deliveryDate: "",
+        });
+        fetchLeads();
       }
-
-      toast.success("Lead accepted and converted to client", { position: "top-right" });
-      setAcceptModalData({
-        isOpen: false,
-        leadId: null,
-        startDate: "",
-        deliveryDate: "",
-      });
-      fetchLeads();
-    } catch (error) {
-      toast.error("Failed to accept lead", { position: "top-right" });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to accept lead');
     }
   };
 
   const handleReject = async (id: string) => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch(`${API_URL}/api/leads/${id}/reject`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to reject lead")
+      const response = await axiosInstance.post(`/api/leads/${id}/reject`);
+      if (response.data) {
+        toast.success("Lead rejected", { position: "top-right" });
+        fetchLeads();
       }
-
-      toast.success("Lead rejected", { position: "top-right" })
-      fetchLeads()
-    } catch (error) {
-      toast.error("Failed to reject lead", { position: "top-right" })
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to reject lead');
     }
   }
 
   const handleCallUpdate = async (id: string, callType: "firstCall" | "followUpCall") => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch(`${API_URL}/api/leads/${id}/call`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          [callType]: new Date().toISOString(),
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to update call status")
+      const response = await axiosInstance.put(`/api/leads/${id}/call`, {
+        [callType]: new Date().toISOString()
+      });
+      if (response.data) {
+        toast.success("Call status updated", { position: "top-right" });
+        fetchLeads();
       }
-
-      toast.success("Call status updated", { position: "top-right" })
-      fetchLeads()
-    } catch (error) {
-      toast.error("Failed to update call status", { position: "top-right" })
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update call status');
     }
   }
 

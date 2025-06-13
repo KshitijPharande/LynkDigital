@@ -23,6 +23,7 @@ import { toast } from "sonner"
 import { format } from "date-fns"
 import { Input } from "@/components/ui/input"
 import { motion } from "framer-motion"
+import axiosInstance from '../../lib/axios'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -82,16 +83,10 @@ export default function ClientsPage() {
 
   const fetchClients = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch(`${API_URL}/api/clients`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      const data = await response.json()
-      setClients(data)
+      const response = await axiosInstance.get('/api/clients');
+      setClients(response.data);
     } catch (error) {
-      toast.error("Failed to fetch clients", { position: "top-right" })
+      console.error('Error fetching clients:', error);
     }
   }
 
@@ -101,24 +96,18 @@ export default function ClientsPage() {
 
   const handlePaymentUpdate = async (clientId: string, month: number, year: number, paid: boolean) => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch(`${API_URL}/api/clients/${clientId}/payment`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ month, year, paid }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to update payment status")
+      const response = await axiosInstance.put(`${API_URL}/api/clients/${clientId}/payment`, {
+        month,
+        year,
+        paid
+      });
+      
+      if (response.data) {
+        toast.success('Payment status updated');
+        fetchClients();
       }
-
-      toast.success("Payment status updated", { position: "top-right" })
-      fetchClients()
-    } catch (error) {
-      toast.error("Failed to update payment status", { position: "top-right" })
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update payment status');
     }
   }
 
@@ -143,20 +132,13 @@ export default function ClientsPage() {
 
   const handleTerminateClient = async (clientId: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/clients/${clientId}/terminate`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to terminate client");
+      const response = await axiosInstance.put(`${API_URL}/api/clients/${clientId}/terminate`);
+      if (response.data) {
+        toast.success('Client terminated successfully');
+        fetchClients();
       }
-      toast.success("Client terminated", { position: "top-right" });
-      fetchClients();
-    } catch (error) {
-      toast.error("Failed to terminate client", { position: "top-right" });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to terminate client');
     }
   };
 
@@ -165,22 +147,13 @@ export default function ClientsPage() {
 
   const handleMarkCompleted = async (clientId: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/clients/${clientId}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status: "completed" }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to mark as completed");
+      const response = await axiosInstance.put(`${API_URL}/api/clients/${clientId}/status`, { status: "completed" });
+      if (response.data) {
+        toast.success('Project marked as completed');
+        fetchClients();
       }
-      toast.success("Project marked as completed", { position: "top-right" });
-      fetchClients();
-    } catch (error) {
-      toast.error("Failed to mark as completed", { position: "top-right" });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to mark as completed');
     }
   };
 
@@ -188,26 +161,24 @@ export default function ClientsPage() {
     if (!selectedFile) return;
     setUploadingProof(clientId);
     try {
-      const token = localStorage.getItem("token");
       const formData = new FormData();
-      formData.append("file", selectedFile);
-      formData.append("month", month.toString());
-      formData.append("year", year.toString());
-      const response = await fetch(`${API_URL}/api/clients/${clientId}/payment-proof`, {
-        method: "POST",
+      formData.append('file', selectedFile);
+      formData.append('month', month.toString());
+      formData.append('year', year.toString());
+      const response = await axiosInstance.post(`${API_URL}/api/clients/${clientId}/payment-proof`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
-        body: formData,
       });
-      if (!response.ok) throw new Error("Failed to upload proof");
-      toast.success("Payment proof uploaded", { position: "top-right" });
-      setSelectedFile(null);
-      setUploadMonth(null);
-      setUploadYear(null);
-      fetchClients();
-    } catch (error) {
-      toast.error("Failed to upload proof", { position: "top-right" });
+      if (response.data) {
+        toast.success('Payment proof uploaded successfully');
+        setSelectedFile(null);
+        setUploadMonth(null);
+        setUploadYear(null);
+        fetchClients();
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to upload proof');
     } finally {
       setUploadingProof(null);
     }
@@ -221,26 +192,24 @@ export default function ClientsPage() {
       await handleMarkCompleted(clientId);
       // Upload proof if file selected
       if (webdevProofFile) {
-        const token = localStorage.getItem("token");
         const formData = new FormData();
         const date = new Date(deliveryDate);
-        formData.append("file", webdevProofFile);
-        formData.append("month", (date.getMonth() + 1).toString());
-        formData.append("year", date.getFullYear().toString());
-        const response = await fetch(`${API_URL}/api/clients/${clientId}/payment-proof`, {
-          method: "POST",
+        formData.append('file', webdevProofFile);
+        formData.append('month', (date.getMonth() + 1).toString());
+        formData.append('year', date.getFullYear().toString());
+        const response = await axiosInstance.post(`${API_URL}/api/clients/${clientId}/payment-proof`, formData, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
           },
-          body: formData,
         });
-        if (!response.ok) throw new Error("Failed to upload proof");
-        toast.success("Payment proof uploaded", { position: "top-right" });
+        if (response.data) {
+          toast.success('Payment proof uploaded successfully');
+        }
       }
       setWebdevProofFile(null);
       fetchClients();
-    } catch (error) {
-      toast.error("Failed to mark as completed or upload proof", { position: "top-right" });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to mark as completed or upload proof');
     } finally {
       setWebdevUploading(false);
       setMarkingCompleteId(null);
@@ -249,40 +218,26 @@ export default function ClientsPage() {
 
   const handleRestoreClient = async (clientId: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/clients/${clientId}/restore`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to restore client");
+      const response = await axiosInstance.put(`${API_URL}/api/clients/${clientId}/restore`);
+      if (response.data) {
+        toast.success('Client restored successfully');
+        fetchClients();
       }
-      toast.success("Client restored", { position: "top-right" });
-      fetchClients();
-    } catch (error) {
-      toast.error("Failed to restore client", { position: "top-right" });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to restore client');
     }
   };
 
   const handleDeleteClient = async (clientId: string) => {
     if (!window.confirm("Are you sure you want to permanently delete this client? This cannot be undone.")) return;
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/clients/${clientId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete client");
+      const response = await axiosInstance.delete(`${API_URL}/api/clients/${clientId}`);
+      if (response.data) {
+        toast.success('Client deleted successfully');
+        fetchClients();
       }
-      toast.success("Client deleted", { position: "top-right" });
-      fetchClients();
-    } catch (error) {
-      toast.error("Failed to delete client", { position: "top-right" });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to delete client');
     }
   };
 
@@ -298,23 +253,14 @@ export default function ClientsPage() {
   const handleUpdateClient = async () => {
     if (!editingClient) return;
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/clients/${editingClient._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(editFormData),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to update client");
+      const response = await axiosInstance.put(`${API_URL}/api/clients/${editingClient._id}`, editFormData);
+      if (response.data) {
+        toast.success('Client updated successfully');
+        setEditingClient(null);
+        fetchClients();
       }
-      toast.success("Client updated", { position: "top-right" });
-      setEditingClient(null);
-      fetchClients();
-    } catch (error) {
-      toast.error("Failed to update client", { position: "top-right" });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update client');
     }
   };
 

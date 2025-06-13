@@ -6,6 +6,7 @@ import { ChartContainer } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line } from "recharts";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
+import axiosInstance from '../../lib/axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,19 +15,17 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const [leadsRes, clientsRes, invoicesRes] = await Promise.all([
-          fetch(`${API_URL}/api/leads`, { headers: { Authorization: `Bearer ${token}` } }),
-          fetch(`${API_URL}/api/clients`, { headers: { Authorization: `Bearer ${token}` } }),
-          fetch(`${API_URL}/api/invoices`, { headers: { Authorization: `Bearer ${token}` } }),
+        const [leadsResponse, clientsResponse, invoicesResponse] = await Promise.all([
+          axiosInstance.get('/api/leads'),
+          axiosInstance.get('/api/clients'),
+          axiosInstance.get('/api/invoices')
         ]);
-        const [leads, clients, invoices] = await Promise.all([
-          leadsRes.json(),
-          clientsRes.json(),
-          invoicesRes.json(),
-        ]);
+
+        const leads = leadsResponse.data;
+        const clients = clientsResponse.data;
+        const invoices = invoicesResponse.data;
         // Calculate stats
         const totalLeads = leads.length;
         const totalClients = clients.length;
@@ -78,13 +77,15 @@ export default function AdminDashboard() {
             { name: "Partial", value: partial },
           ],
         });
-      } catch {
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
         setStats(null);
       } finally {
         setLoading(false);
       }
     };
-    fetchStats();
+
+    fetchData();
   }, []);
 
   if (loading) return <div className="text-center py-20 text-lg">Loading dashboard...</div>;

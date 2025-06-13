@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Toaster } from "sonner"
 import { motion } from "framer-motion"
+import axiosInstance from '../lib/axios'
 
 const navigation = [
   { name: "Leads", href: "/admin/leads" },
@@ -22,6 +23,7 @@ export default function AdminLayout({
   const router = useRouter()
   const pathname = usePathname()
   const [isLoading, setIsLoading] = useState(true)
+  const [leads, setLeads] = useState([])
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -33,14 +35,15 @@ export default function AdminLayout({
       // Optionally, verify token with a lightweight API call
       if (token && pathname !== "/admin") {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/leads`, {
+          const response = await axiosInstance.get('/api/leads', {
             headers: { Authorization: `Bearer ${token}` },
           })
-          if (res.status === 401) {
+          if (response.status === 401) {
             localStorage.removeItem("token")
             router.push("/admin")
             return
           }
+          setLeads(response.data)
         } catch {
           localStorage.removeItem("token")
           router.push("/admin")

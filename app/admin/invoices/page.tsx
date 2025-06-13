@@ -21,6 +21,7 @@ import { Tooltip, TooltipProvider } from "@/components/ui/tooltip"
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import axios, { AxiosError } from 'axios';
 
 interface Invoice {
   _id: string
@@ -103,15 +104,15 @@ export default function InvoicesPage() {
   const fetchInvoices = async () => {
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch(`${API_URL}/api/invoices`, {
+      const { data } = await axios.get(`${API_URL}/api/invoices`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      const data = await response.json()
       setInvoices(data)
     } catch (error) {
-      toast.error("Failed to fetch invoices", { position: "top-right" })
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.data?.message || "Failed to fetch invoices", { position: "top-right" })
     }
   }
 
@@ -139,24 +140,18 @@ export default function InvoicesPage() {
 
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch(`${API_URL}/api/invoices`, {
-        method: "POST",
+      const { data } = await axios.post(`${API_URL}/api/invoices`, {
+        ...formData,
+        advanceAmount: isFullPayment ? totalAmount : parseFloat(formData.advanceAmount),
+        remainingBalance: isFullPayment ? 0 : parseFloat(formData.remainingBalance),
+        lineItems: lineItems.map(item => ({ description: item.description, amount: parseFloat(item.amount) })),
+        note,
+      }, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          ...formData,
-          advanceAmount: isFullPayment ? totalAmount : parseFloat(formData.advanceAmount),
-          remainingBalance: isFullPayment ? 0 : parseFloat(formData.remainingBalance),
-          lineItems: lineItems.map(item => ({ description: item.description, amount: parseFloat(item.amount) })),
-          note,
-        }),
       })
-
-      if (!response.ok) {
-        throw new Error("Failed to add invoice")
-      }
 
       toast.success("Invoice added successfully", { position: "top-right" })
       setFormData({
@@ -176,7 +171,8 @@ export default function InvoicesPage() {
       setIsFullPayment(false)
       fetchInvoices()
     } catch (error) {
-      toast.error("Failed to add invoice", { position: "top-right" })
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.data?.message || "Failed to add invoice", { position: "top-right" })
     } finally {
       setIsLoading(false)
     }
@@ -185,12 +181,12 @@ export default function InvoicesPage() {
   const handleDownloadPDF = async (invoiceId: string) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/invoices/${invoiceId}/pdf`, {
+      const response = await axios.get(`${API_URL}/api/invoices/${invoiceId}/pdf`, {
         headers: { Authorization: `Bearer ${token}` },
+        responseType: 'blob'
       });
-      if (!response.ok) throw new Error("Failed to download PDF");
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      
+      const url = window.URL.createObjectURL(new Blob([response.data]));
       const a = document.createElement("a");
       a.href = url;
       a.download = `invoice-${invoiceId}.pdf`;
@@ -199,7 +195,8 @@ export default function InvoicesPage() {
       a.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      toast.error("Failed to download PDF", { position: "top-right" })
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.data?.message || "Failed to download PDF", { position: "top-right" })
     }
   };
 
@@ -207,19 +204,16 @@ export default function InvoicesPage() {
     if (!window.confirm("Are you sure you want to permanently delete this invoice? This cannot be undone.")) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/invoices/${invoiceId}`, {
-        method: "DELETE",
+      await axios.delete(`${API_URL}/api/invoices/${invoiceId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!response.ok) {
-        throw new Error("Failed to delete invoice");
-      }
       toast.success("Invoice deleted", { position: "top-right" })
       fetchInvoices()
     } catch (error) {
-      toast.error("Failed to delete invoice", { position: "top-right" })
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.data?.message || "Failed to delete invoice", { position: "top-right" })
     }
   };
 
@@ -245,22 +239,18 @@ export default function InvoicesPage() {
     if (!editingInvoice) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/invoices/${editingInvoice._id}`, {
-        method: "PUT",
+      const { data } = await axios.put(`${API_URL}/api/invoices/${editingInvoice._id}`, editFormData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(editFormData),
       });
-      if (!response.ok) {
-        throw new Error("Failed to update invoice");
-      }
       toast.success("Invoice updated", { position: "top-right" })
       setEditingInvoice(null);
       fetchInvoices();
     } catch (error) {
-      toast.error("Failed to update invoice", { position: "top-right" })
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.data?.message || "Failed to update invoice", { position: "top-right" })
     }
   };
 

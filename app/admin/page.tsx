@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { toast, Toaster } from "sonner"
+import axiosInstance from '../lib/axios'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -17,34 +18,26 @@ export default function AdminLogin() {
     email: "",
     password: "",
   })
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError("")
     setIsLoading(true)
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const response = await axiosInstance.post('/api/auth/login', {
+        email: formData.email,
+        password: formData.password,
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        toast.error(data.message || "Invalid email or password", { position: "top-right" })
-        setIsLoading(false)
-        return
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token)
+        toast.success("Login successful")
+        router.push("/admin/leads")
       }
-
-      // Store token in localStorage
-      localStorage.setItem("token", data.token)
-      toast.success("Login successful")
-      router.push("/admin/leads")
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Login failed")
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Login failed. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -83,6 +76,7 @@ export default function AdminLogin() {
             {isLoading ? "Logging in..." : "Login"}
           </Button>
         </form>
+        {error && <p className="text-red-500 mt-2">{error}</p>}
       </div>
     </div>
   )

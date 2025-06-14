@@ -7,11 +7,13 @@ import { Button } from "@/components/ui/button"
 import { Toaster } from "sonner"
 import { motion } from "framer-motion"
 import axiosInstance from '../lib/axios'
+import AdminMobileNav from "./components/AdminMobileNav"
 
 const navigation = [
   { name: "Leads", href: "/admin/leads" },
   { name: "Clients", href: "/admin/clients" },
   { name: "Invoices", href: "/admin/invoices" },
+  { name: "Calendar", href: "/admin/calendar" },
   { name: "Dashboard", href: "/admin/dashboard" },
 ]
 
@@ -73,13 +75,13 @@ export default function AdminLayout({
       <nav className="bg-[#112240] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex">
+            <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <Link href="/admin/leads" className="text-xl font-bold text-white">
                   Lynk Digital Admin
                 </Link>
               </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <div className="hidden lg:flex lg:ml-6 lg:space-x-8">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
@@ -95,7 +97,8 @@ export default function AdminLayout({
                 ))}
               </div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
+              <AdminMobileNav />
               <Button variant="outline" onClick={handleLogout} className="text-white border-white hover:bg-[#233554]">
                 Logout
               </Button>

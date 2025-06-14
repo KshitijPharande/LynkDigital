@@ -4,13 +4,13 @@ const path = require('path');
 
 exports.addInvoice = async (req, res) => {
   try {
-    const { clientName, phone, email, companyName, advanceAmount, remainingBalance, fullAmount, lineItems, note, bankName, accountNumber, paymentType } = req.body;
+    const { invoiceNumber, phone, email, companyName, advanceAmount, remainingBalance, fullAmount, lineItems, note, bankName, accountNumber, paymentType } = req.body;
     // Calculate fullAmount if not provided
     const total = lineItems && Array.isArray(lineItems)
       ? lineItems.reduce((sum, item) => sum + Number(item.amount || 0), 0)
       : Number(fullAmount) || 0;
     const invoice = new Invoice({
-      clientName,
+      invoiceNumber,
       phone,
       email,
       companyName,
@@ -26,7 +26,11 @@ exports.addInvoice = async (req, res) => {
     await invoice.save();
     res.status(201).json(invoice);
   } catch (err) {
+    if (err.code === 11000) {
+      res.status(400).json({ message: 'Invoice number already exists' });
+    } else {
     res.status(500).json({ message: 'Server error' });
+    }
   }
 };
 
@@ -50,7 +54,7 @@ exports.getInvoicePDF = async (req, res) => {
     }
     console.log('Invoice found:', { 
       id: invoice._id,
-      clientName: invoice.clientName,
+      invoiceNumber: invoice.invoiceNumber,
       totalAmount: invoice.fullAmount 
     });
 
@@ -248,9 +252,11 @@ exports.getInvoicePDF = async (req, res) => {
           display: flex;
           align-items: center;
           gap: 8px;
-    }
+        }
         .contact-icon {
-          font-size: 16px;
+          width: 16px;
+          height: 16px;
+          object-fit: contain;
     }
   </style>
 </head>
@@ -270,12 +276,11 @@ exports.getInvoicePDF = async (req, res) => {
           <div class="invoice-to">
             <h3>Invoice to :</h3>
             <div class="client-name">${invoice.companyName ? invoice.companyName : ''}</div>
-            <div>${invoice.clientName}</div>
         ${invoice.phone ? 'Contact: ' + invoice.phone + '<br/>' : ''}
         ${invoice.email ? invoice.email + '<br/>' : ''}
       </div>
           <div class="invoice-meta">
-        <div><strong>Invoice no :</strong> ${invoice._id}</div>
+            <div><strong>Invoice no :</strong> ${invoice.invoiceNumber}</div>
         <div><strong>Date-</strong> ${new Date(invoice.createdAt).toLocaleDateString()}</div>
       </div>
     </div>
@@ -299,8 +304,8 @@ exports.getInvoicePDF = async (req, res) => {
               <td>${idx + 1}</td>
               <td>${item.description || ''}</td>
               <td>${item.qty || 1}</td>
-              <td>₹${item.price || item.amount || 0}</td>
-              <td>₹${(item.qty ? item.qty * (item.price || item.amount || 0) : (item.price || item.amount || 0))}</td>
+              <td>&#8377;${item.price || item.amount || 0}</td>
+              <td>&#8377;${item.amount || (item.qty ? item.qty * (item.price || 0) : (item.price || 0))}</td>
             </tr>
           `).join('')
           : `<tr><td colspan="5">No line items</td></tr>`}
@@ -324,7 +329,9 @@ exports.getInvoicePDF = async (req, res) => {
           <div class="grand-total">
             <div class="section-header">GRAND TOTAL :</div>
             <div class="section-content">
-              <div class="grand-total-amount">₹${invoice.fullAmount || 0}</div>
+              <div class="grand-total-amount">&#8377;${invoice.fullAmount || 0}</div>
+              <div class="mt-2">Advance: &#8377;${invoice.advanceAmount || 0}</div>
+              <div class="mt-2">Remaining: &#8377;${invoice.remainingBalance || 0}</div>
             </div>
           </div>
         </div>
@@ -332,6 +339,7 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Footer Section -->
         <div class="footer-section">
           <div class="thank-you">Thank you for business with us!</div>
+          <img src="http://localhost:5000/swaradasign.png" alt="Signature" style="height: 60px; margin: 10px 0; padding-right: 20px;" />
           <div class="signature-name">Swarada Mhetre</div>
           <div class="signature-title">CFO</div>
       </div>
@@ -339,15 +347,15 @@ exports.getInvoicePDF = async (req, res) => {
         <!-- Contact Footer -->
         <div class="contact-footer">
           <div class="contact-item">
-            <span class="contact-icon">📞</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/455/455705.png" alt="Phone" class="contact-icon" />
             <span>8010195467</span>
       </div>
           <div class="contact-item">
-            <span class="contact-icon">✉</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/3178/3178158.png" alt="Email" class="contact-icon" />
             <span>hello@lynkdigital.co.in</span>
     </div>
           <div class="contact-item">
-            <span class="contact-icon">📍</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/2776/2776067.png" alt="Location" class="contact-icon" />
             <span>Chintamani Apartments,<br>Sadashiv Peth, Pune</span>
     </div>
     </div>
@@ -360,7 +368,8 @@ exports.getInvoicePDF = async (req, res) => {
     console.log('Launching Puppeteer browser...');
     let browser;
     try {
-      browser = await puppeteer.launch({
+      // Configure Puppeteer based on environment
+      const launchOptions = {
         headless: "new",
         args: [
           '--no-sandbox',
@@ -369,12 +378,42 @@ exports.getInvoicePDF = async (req, res) => {
           '--disable-accelerated-2d-canvas',
           '--disable-gpu',
           '--window-size=1920x1080'
-        ],
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined
-      });
+        ]
+      };
+
+      // Set Chrome path for Windows
+      if (process.platform === 'win32') {
+        const possibleChromePaths = [
+          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+          process.env.LOCALAPPDATA + '\\Google\\Chrome\\Application\\chrome.exe'
+        ];
+
+        for (const path of possibleChromePaths) {
+          if (require('fs').existsSync(path)) {
+            launchOptions.executablePath = path;
+            console.log('Found Chrome at:', path);
+            break;
+          }
+        }
+
+        if (!launchOptions.executablePath) {
+          throw new Error('Chrome not found in common installation paths. Please install Chrome or set PUPPETEER_EXECUTABLE_PATH environment variable.');
+        }
+      } else if (process.env.NODE_ENV === 'production') {
+        launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium-browser';
+      }
+
+      console.log('Launch options:', JSON.stringify(launchOptions, null, 2));
+      browser = await puppeteer.launch(launchOptions);
     } catch (err) {
-      console.error('Failed to launch Puppeteer:', err);
-      throw new Error(`Failed to launch browser: ${err.message}`);
+      console.error('Failed to launch Puppeteer:', {
+        message: err.message,
+        stack: err.stack,
+        name: err.name,
+        code: err.code
+      });
+      throw new Error(`Failed to launch browser: ${err.message}. Please ensure Chrome is installed.`);
     }
     console.log('Browser launched successfully');
 
@@ -385,7 +424,7 @@ exports.getInvoicePDF = async (req, res) => {
       console.log('New page created');
 
       console.log('Setting page content...');
-      await page.setContent(html, { waitUntil: 'networkidle0' });
+    await page.setContent(html, { waitUntil: 'networkidle0' });
       console.log('Page content set successfully');
 
       console.log('Generating PDF...');
@@ -402,24 +441,25 @@ exports.getInvoicePDF = async (req, res) => {
       console.log('PDF generated successfully, buffer size:', pdfBuffer.length);
 
       console.log('Closing browser...');
-      await browser.close();
+    await browser.close();
       console.log('Browser closed successfully');
 
       console.log('Setting response headers...');
-      res.set({
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename=invoice-${invoice._id}.pdf`,
-      });
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=invoice-${invoice._id}.pdf`,
+    });
       console.log('Response headers set');
 
       console.log('Sending PDF response...');
-      res.send(pdfBuffer);
+    res.send(pdfBuffer);
       console.log('PDF response sent successfully');
     } catch (err) {
       console.error('Error during PDF generation:', {
         message: err.message,
         stack: err.stack,
-        name: err.name
+        name: err.name,
+        code: err.code
       });
       
       // Make sure to close the browser if it was opened
@@ -438,12 +478,17 @@ exports.getInvoicePDF = async (req, res) => {
     console.error('PDF generation error:', {
       message: err.message,
       stack: err.stack,
-      name: err.name
+      name: err.name,
+      code: err.code
     });
     res.status(500).json({ 
       message: 'PDF generation error', 
       error: err.message,
-      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+      details: process.env.NODE_ENV === 'development' ? {
+        stack: err.stack,
+        name: err.name,
+        code: err.code
+      } : undefined
     });
   }
 };

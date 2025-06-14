@@ -7,7 +7,7 @@ const invoiceSchema = new mongoose.Schema({
     email: { type: String, default: 'pharandekshitij@gmail.com' },
     address: { type: String, default: 'Pune' },
   },
-  clientName: { type: String, required: true },
+  invoiceNumber: { type: String, required: true, unique: true },
   phone: { type: String, required: true },
   email: { type: String, required: true },
   companyName: { type: String },

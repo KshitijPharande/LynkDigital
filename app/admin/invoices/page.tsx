@@ -31,7 +31,7 @@ interface Invoice {
     email: string
     address: string
   }
-  clientName: string
+  invoiceNumber: string
   phone: string
   email: string
   companyName: string
@@ -49,6 +49,7 @@ interface Invoice {
 interface LineItem {
   description: string;
   amount: string;
+  qty: string;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -58,7 +59,7 @@ export default function InvoicesPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isFullPayment, setIsFullPayment] = useState(false)
   const [formData, setFormData] = useState({
-    clientName: "",
+    invoiceNumber: "",
     phone: "",
     email: "",
     companyName: "",
@@ -69,14 +70,14 @@ export default function InvoicesPage() {
     accountNumber: "",
     paymentType: "bank_transfer",
   })
-  const [lineItems, setLineItems] = useState<LineItem[]>([{ description: "", amount: "" }]);
+  const [lineItems, setLineItems] = useState<LineItem[]>([{ description: "", amount: "", qty: "1" }]);
   const [note, setNote] = useState("");
   const [search, setSearch] = useState("");
   const [filterMonth, setFilterMonth] = useState(0); // 0 = all
   const [filterYear, setFilterYear] = useState(0); // 0 = all
   const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
   const [editFormData, setEditFormData] = useState({
-    clientName: "",
+    invoiceNumber: "",
     phone: "",
     email: "",
     companyName: "",
@@ -84,7 +85,7 @@ export default function InvoicesPage() {
     remainingBalance: "",
     fullAmount: "",
     note: "",
-    lineItems: [{ description: "", amount: "" }],
+    lineItems: [{ description: "", amount: "", qty: "1" }],
     bankName: "",
     accountNumber: "",
     paymentType: "bank_transfer",
@@ -100,6 +101,7 @@ export default function InvoicesPage() {
   const [amountMin, setAmountMin] = useState('');
   const [amountMax, setAmountMax] = useState('');
   const [filterClient, setFilterClient] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fetchInvoices = async () => {
     try {
@@ -120,14 +122,26 @@ export default function InvoicesPage() {
     fetchInvoices()
   }, [])
 
-  const totalAmount = lineItems.reduce((sum, item) => sum + parseFloat(item.amount || "0"), 0);
+  const totalAmount = lineItems.reduce((sum, item) => {
+    const amount = parseFloat(item.amount || "0");
+    const qty = parseFloat(item.qty || "1");
+    return sum + (amount * qty);
+  }, 0);
 
   const handleLineItemChange = (index: number, field: keyof LineItem, value: string) => {
-    setLineItems((prev) => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
+    setLineItems((prev) => {
+      const newItems = prev.map((item, i) => {
+        if (i === index) {
+          return { ...item, [field]: value };
+        }
+        return item;
+      });
+      return newItems;
+    });
   };
 
   const handleAddLineItem = () => {
-    setLineItems((prev) => [...prev, { description: "", amount: "" }]);
+    setLineItems((prev) => [...prev, { description: "", amount: "", qty: "1" }]);
   };
 
   const handleRemoveLineItem = (index: number) => {
@@ -140,11 +154,24 @@ export default function InvoicesPage() {
 
     try {
       const token = localStorage.getItem("token")
+      const totalAmount = lineItems.reduce((sum, item) => {
+        const amount = parseFloat(item.amount || "0");
+        const qty = parseFloat(item.qty || "1");
+        return sum + (amount * qty);
+      }, 0);
+      const advanceAmount = isFullPayment ? totalAmount : parseFloat(formData.advanceAmount);
+      const remainingBalance = isFullPayment ? 0 : totalAmount - advanceAmount;
+
       const { data } = await axios.post(`${API_URL}/api/invoices`, {
         ...formData,
-        advanceAmount: isFullPayment ? totalAmount : parseFloat(formData.advanceAmount),
-        remainingBalance: isFullPayment ? 0 : parseFloat(formData.remainingBalance),
-        lineItems: lineItems.map(item => ({ description: item.description, amount: parseFloat(item.amount) })),
+        advanceAmount,
+        remainingBalance,
+        fullAmount: totalAmount,
+        lineItems: lineItems.map(item => ({
+          description: item.description,
+          amount: parseFloat(item.amount || "0") * parseFloat(item.qty || "1"),
+          qty: parseFloat(item.qty || "1")
+        })),
         note,
       }, {
         headers: {
@@ -155,7 +182,7 @@ export default function InvoicesPage() {
 
       toast.success("Invoice added successfully", { position: "top-right" })
       setFormData({
-        clientName: "",
+        invoiceNumber: "",
         phone: "",
         email: "",
         companyName: "",
@@ -166,7 +193,7 @@ export default function InvoicesPage() {
         accountNumber: "",
         paymentType: "bank_transfer",
       })
-      setLineItems([{ description: "", amount: "" }])
+      setLineItems([{ description: "", amount: "", qty: "1" }])
       setNote("")
       setIsFullPayment(false)
       fetchInvoices()
@@ -178,64 +205,103 @@ export default function InvoicesPage() {
     }
   }
 
+  const handleAdvanceAmountChange = (value: string) => {
+    const totalAmount = lineItems.reduce((sum, item) => {
+      const amount = parseFloat(item.amount || "0");
+      const qty = parseFloat(item.qty || "1");
+      return sum + (amount * qty);
+    }, 0);
+    const advanceAmount = parseFloat(value) || 0;
+    const remainingBalance = totalAmount - advanceAmount;
+    
+    setFormData(prev => ({
+      ...prev,
+      advanceAmount: value,
+      remainingBalance: remainingBalance.toString(),
+      fullAmount: totalAmount.toString()
+    }));
+  };
+
   const handleDownloadPDF = async (invoiceId: string) => {
     try {
       console.log('Starting PDF download for invoice:', invoiceId);
+      setLoading(true);
+      
       const token = localStorage.getItem("token");
-      
-      console.log('Making API request to:', `${API_URL}/api/invoices/${invoiceId}/pdf`);
-      const response = await axios.get(`${API_URL}/api/invoices/${invoiceId}/pdf`, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'Accept': 'application/pdf'
-        },
-        responseType: 'blob'
-      });
-      
-      console.log('Response received:', {
-        status: response.status,
-        statusText: response.statusText,
-        headers: response.headers,
-        dataSize: response.data.size
-      });
-      
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `invoice-${invoiceId}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-      console.log('PDF download completed successfully');
-    } catch (error: any) {
-      console.error('PDF download error:', {
-        message: error?.message,
-        response: error?.response ? {
-          status: error.response.status,
-          statusText: error.response.statusText,
-          data: error.response.data,
-          headers: error.response.headers
-        } : 'No response data',
-        config: error?.config
-      });
-      
-      // Try to read the error message from the response if it's a blob
-      if (error?.response?.data instanceof Blob) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          try {
-            const errorData = JSON.parse(reader.result as string);
-            console.error('Error details from server:', errorData);
-            toast.error(errorData?.message || "Failed to download PDF", { position: "top-right" });
-          } catch (e) {
-            console.error('Could not parse error response:', e);
-            toast.error("Failed to download PDF", { position: "top-right" });
+      if (!token) {
+        toast.error("Please login to download PDF");
+        setLoading(false);
+        return;
+      }
+
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/invoices/${invoiceId}/pdf`,
+        {
+          responseType: 'blob',
+          headers: {
+            'Accept': 'application/pdf',
+            'Authorization': `Bearer ${token}`
           }
-        };
-        reader.readAsText(error.response.data);
+        }
+      );
+
+      // Create blob URL and trigger download
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `invoice-${invoiceId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      
+      setLoading(false);
+    } catch (error: any) {
+      console.error('PDF download error:', error);
+      setLoading(false);
+      
+      // Enhanced error handling
+      let errorMessage = 'Failed to download PDF';
+      
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+        
+        // Try to read the error message from the response
+        if (error.response.data instanceof Blob) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const errorData = JSON.parse(reader.result as string);
+              console.error('Error details from server:', errorData);
+              errorMessage = errorData.message || errorData.error || errorMessage;
+              toast.error(errorMessage);
+            } catch (e) {
+              console.error('Error parsing error response:', e);
+              toast.error('Failed to parse error response');
+            }
+          };
+          reader.onerror = () => {
+            console.error('Error reading error response');
+            toast.error('Failed to read error response');
+          };
+          reader.readAsText(error.response.data);
+        } else {
+          errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+          toast.error(errorMessage);
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('Error request:', error.request);
+        toast.error('No response received from server');
       } else {
-        toast.error(error?.response?.data?.message || "Failed to download PDF", { position: "top-right" });
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message);
+        toast.error(error.message || 'An unexpected error occurred');
       }
     }
   };
@@ -260,7 +326,7 @@ export default function InvoicesPage() {
   const handleEditInvoice = (invoice: Invoice) => {
     setEditingInvoice(invoice);
     setEditFormData({
-      clientName: invoice.clientName,
+      invoiceNumber: invoice.invoiceNumber,
       phone: invoice.phone,
       email: invoice.email,
       companyName: invoice.companyName,
@@ -268,7 +334,7 @@ export default function InvoicesPage() {
       remainingBalance: invoice.remainingBalance.toString(),
       fullAmount: invoice.fullAmount.toString(),
       note: invoice.note || "",
-      lineItems: invoice.lineItems || [{ description: "", amount: "" }],
+      lineItems: invoice.lineItems || [{ description: "", amount: "", qty: "1" }],
       bankName: invoice.bankName || "",
       accountNumber: invoice.accountNumber || "",
       paymentType: invoice.paymentType || "bank_transfer",
@@ -296,7 +362,7 @@ export default function InvoicesPage() {
 
   const filteredInvoices = invoices.filter((invoice) => {
     const matchesSearch =
-      invoice.clientName.toLowerCase().includes(search.toLowerCase()) ||
+      (invoice.invoiceNumber || "").toLowerCase().includes(search.toLowerCase()) ||
       (invoice.companyName || "").toLowerCase().includes(search.toLowerCase()) ||
       (invoice.lineItems || []).some(item => item.description.toLowerCase().includes(search.toLowerCase()));
     const date = new Date(invoice.createdAt);
@@ -315,7 +381,7 @@ export default function InvoicesPage() {
       (!amountMax || invoice.fullAmount <= Number(amountMax));
     const matchesClient =
       !filterClient ||
-      invoice.clientName.toLowerCase().includes(filterClient.toLowerCase()) ||
+      (invoice.invoiceNumber || "").toLowerCase().includes(filterClient.toLowerCase()) ||
       (invoice.companyName || '').toLowerCase().includes(filterClient.toLowerCase());
     return matchesSearch && matchesMonth && matchesYear && matchesDateRange && matchesStatus && matchesAmount && matchesClient;
   }).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -330,11 +396,11 @@ export default function InvoicesPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="clientName">Client Name</Label>
+                <Label htmlFor="invoiceNumber">Invoice Number</Label>
                 <Input
-                  id="clientName"
-                  value={formData.clientName}
-                  onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+                  id="invoiceNumber"
+                  value={formData.invoiceNumber}
+                  onChange={(e) => setFormData({ ...formData, invoiceNumber: e.target.value })}
                   required
                 />
               </div>
@@ -374,20 +440,32 @@ export default function InvoicesPage() {
                       value={item.description}
                       onChange={e => handleLineItemChange(idx, "description", e.target.value)}
                       required
+                      className="flex-1"
                     />
                     <Input
-                      placeholder="Amount"
+                      placeholder="Quantity"
+                      type="number"
+                      min="1"
+                      value={item.qty}
+                      onChange={e => handleLineItemChange(idx, "qty", e.target.value)}
+                      className="w-24"
+                    />
+                    <Input
+                      placeholder="Amount per item"
                       type="number"
                       value={item.amount}
                       onChange={e => handleLineItemChange(idx, "amount", e.target.value)}
                       required
+                      className="w-32"
                     />
                     <Button type="button" variant="outline" size="sm" onClick={() => handleRemoveLineItem(idx)} disabled={lineItems.length === 1}>Remove</Button>
                   </div>
                 ))}
+                <div className="flex justify-between items-center">
                 <Button type="button" size="sm" onClick={handleAddLineItem}>Add Item</Button>
+                  <div className="font-bold">Total: ₹{totalAmount}</div>
+                </div>
               </div>
-              <div className="font-bold mt-2">Total: ₹{totalAmount}</div>
               <div className="flex items-center space-x-2 mt-2">
                 <Checkbox
                   id="fullPayment"
@@ -404,7 +482,7 @@ export default function InvoicesPage() {
                       id="advanceAmount"
                       type="number"
                       value={formData.advanceAmount}
-                      onChange={(e) => setFormData({ ...formData, advanceAmount: e.target.value })}
+                      onChange={(e) => handleAdvanceAmountChange(e.target.value)}
                       required
                     />
                   </div>
@@ -414,8 +492,8 @@ export default function InvoicesPage() {
                       id="remainingBalance"
                       type="number"
                       value={formData.remainingBalance}
-                      onChange={(e) => setFormData({ ...formData, remainingBalance: e.target.value })}
-                      required
+                      readOnly
+                      className="bg-zinc-800/50"
                     />
                   </div>
                 </div>
@@ -477,7 +555,7 @@ export default function InvoicesPage() {
           <CardTitle>Invoices</CardTitle>
           <div className="flex flex-wrap gap-2 mt-2 items-center">
             <Input
-              placeholder="Search by client, company, or item..."
+              placeholder="Search by invoice number, company, or item..."
               value={search}
               onChange={e => setSearch(e.target.value)}
               className="w-56"
@@ -564,7 +642,7 @@ export default function InvoicesPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="min-w-[120px]">Date</TableHead>
-                    <TableHead className="min-w-[120px]">Client</TableHead>
+                    <TableHead className="min-w-[120px]">Invoice #</TableHead>
                     <TableHead className="min-w-[140px]">Company</TableHead>
                     <TableHead className="min-w-[100px]">Advance</TableHead>
                     <TableHead className="min-w-[100px]">Remaining</TableHead>
@@ -578,8 +656,8 @@ export default function InvoicesPage() {
                     <TableRow key={invoice._id} className="hover:bg-zinc-800/60 transition-colors group align-middle">
                       <TableCell className="py-3 px-2 align-middle">{format(new Date(invoice.createdAt), "MMM d, yyyy")}</TableCell>
                       <TableCell className="py-3 px-2 align-middle truncate max-w-[120px]">
-                        <Tooltip content={invoice.clientName}>
-                          <span>{invoice.clientName || <span className="text-zinc-500">—</span>}</span>
+                        <Tooltip content={invoice.invoiceNumber}>
+                          <span>{invoice.invoiceNumber || <span className="text-zinc-500">—</span>}</span>
                         </Tooltip>
                       </TableCell>
                       <TableCell className="py-3 px-2 align-middle truncate max-w-[140px]">
@@ -637,9 +715,9 @@ export default function InvoicesPage() {
             <div className="space-y-4">
               <Input
                 className="bg-zinc-800 text-white rounded-lg px-4 py-2 border border-zinc-700 focus:ring-2 focus:ring-blue-500"
-                value={editFormData.clientName}
-                onChange={(e) => setEditFormData({ ...editFormData, clientName: e.target.value })}
-                placeholder="Client Name"
+                value={editFormData.invoiceNumber}
+                onChange={(e) => setEditFormData({ ...editFormData, invoiceNumber: e.target.value })}
+                placeholder="Invoice Number"
               />
               <Input
                 className="bg-zinc-800 text-white rounded-lg px-4 py-2 border border-zinc-700 focus:ring-2 focus:ring-blue-500"
@@ -737,8 +815,8 @@ export default function InvoicesPage() {
                 <span>{format(new Date(viewInvoice.createdAt), "MMM d, yyyy")}</span>
               </div>
               <div className="flex justify-between">
-                <span className="font-semibold">Client:</span>
-                <span>{viewInvoice.clientName}</span>
+                <span className="font-semibold">Invoice #:</span>
+                <span>{viewInvoice.invoiceNumber}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-semibold">Company:</span>

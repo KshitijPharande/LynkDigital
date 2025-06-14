@@ -30,11 +30,13 @@ const authRoutes = require('./routes/auth');
 const leadRoutes = require('./routes/lead');
 const clientRoutes = require('./routes/client');
 const invoiceRoutes = require('./routes/invoice');
+const taskRoutes = require('./routes/taskRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/invoices', invoiceRoutes);
+app.use('/api/tasks', taskRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

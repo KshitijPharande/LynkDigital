@@ -8,6 +8,6 @@ router.get('/', auth, leadController.getLeads);
 router.put('/:id/accept', auth, leadController.acceptLead);
 router.put('/:id/reject', auth, leadController.rejectLead);
 router.put('/:id/call', auth, leadController.updateCall);
-router.put('/:id', auth, leadController.updateLead);
+router.put('/:id/edit', auth, leadController.editLead);
 
 module.exports = router; 

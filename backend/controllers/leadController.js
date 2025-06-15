@@ -75,15 +75,13 @@ exports.updateCall = async (req, res) => {
   }
 };
 
-exports.updateLead = async (req, res) => {
+exports.editLead = async (req, res) => {
   try {
     const { name, phone, email, companyName, address, typeOfWork } = req.body;
     const lead = await Lead.findById(req.params.id);
-    if (!lead) return res.status(404).json({ message: 'Lead not found' });
     
-    if (lead.status !== 'pending') {
-      return res.status(400).json({ message: 'Can only edit pending leads' });
-    }
+    if (!lead) return res.status(404).json({ message: 'Lead not found' });
+    if (lead.status !== 'pending') return res.status(400).json({ message: 'Can only edit pending leads' });
 
     lead.name = name;
     lead.phone = phone;
@@ -91,7 +89,7 @@ exports.updateLead = async (req, res) => {
     lead.companyName = companyName;
     lead.address = address;
     lead.typeOfWork = typeOfWork;
-    
+
     await lead.save();
     res.json(lead);
   } catch (err) {

@@ -73,7 +73,7 @@ exports.updateCall = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
-};
+}; 
 
 exports.editLead = async (req, res) => {
   try {

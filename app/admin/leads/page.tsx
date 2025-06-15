@@ -406,7 +406,7 @@ export default function LeadsPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
+                  
                 />
               </div>
               <div className="space-y-2">

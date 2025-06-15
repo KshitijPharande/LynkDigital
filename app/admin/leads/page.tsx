@@ -74,6 +74,22 @@ export default function LeadsPage() {
     startDate: "",
     deliveryDate: "",
   })
+  const [editModalData, setEditModalData] = useState<{
+    isOpen: boolean
+    leadId: string | null
+    formData: typeof formData
+  }>({
+    isOpen: false,
+    leadId: null,
+    formData: {
+      name: "",
+      phone: "",
+      email: "",
+      companyName: "",
+      address: "",
+      typeOfWork: "WebDev",
+    }
+  })
   const [search, setSearch] = useState("");
   const [dateRange, setDateRange] = useState({
     startDate: null as Date | null,
@@ -193,6 +209,48 @@ export default function LeadsPage() {
     }
   }
 
+  const handleEdit = (lead: Lead) => {
+    setEditModalData({
+      isOpen: true,
+      leadId: lead._id,
+      formData: {
+        name: lead.name,
+        phone: lead.phone,
+        email: lead.email,
+        companyName: lead.companyName || "",
+        address: lead.address || "",
+        typeOfWork: lead.typeOfWork,
+      }
+    });
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editModalData.leadId) return;
+
+    try {
+      const response = await axiosInstance.put(`/api/leads/${editModalData.leadId}`, editModalData.formData);
+      if (response.data) {
+        toast.success("Lead updated successfully", { position: "top-right" });
+        setEditModalData({
+          isOpen: false,
+          leadId: null,
+          formData: {
+            name: "",
+            phone: "",
+            email: "",
+            companyName: "",
+            address: "",
+            typeOfWork: "WebDev",
+          }
+        });
+        fetchLeads();
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to update lead", { position: "top-right" });
+    }
+  };
+
   const pendingLeads = leads.filter((lead) => lead.status === "pending")
   const acceptedLeads = leads.filter((lead) => lead.status === "accepted")
   const rejectedLeads = leads.filter((lead) => lead.status === "rejected")
@@ -297,6 +355,13 @@ export default function LeadsPage() {
               <div className="flex space-x-2">
                 {lead.status === "pending" && (
                   <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(lead)}
+                    >
+                      Edit
+                    </Button>
                     <Button
                       variant="outline"
                       size="sm"
@@ -575,6 +640,119 @@ export default function LeadsPage() {
                   <Button onClick={handleAcceptConfirm}>Accept Lead</Button>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {editModalData.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <Card className="w-[500px]">
+            <CardHeader>
+              <CardTitle>Edit Lead</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleEditSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-name">Name</Label>
+                    <Input
+                      id="edit-name"
+                      value={editModalData.formData.name}
+                      onChange={(e) => setEditModalData({
+                        ...editModalData,
+                        formData: { ...editModalData.formData, name: e.target.value }
+                      })}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-phone">Phone</Label>
+                    <Input
+                      id="edit-phone"
+                      value={editModalData.formData.phone}
+                      onChange={(e) => setEditModalData({
+                        ...editModalData,
+                        formData: { ...editModalData.formData, phone: e.target.value }
+                      })}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-email">Email</Label>
+                    <Input
+                      id="edit-email"
+                      type="email"
+                      value={editModalData.formData.email}
+                      onChange={(e) => setEditModalData({
+                        ...editModalData,
+                        formData: { ...editModalData.formData, email: e.target.value }
+                      })}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-companyName">Company Name</Label>
+                    <Input
+                      id="edit-companyName"
+                      value={editModalData.formData.companyName}
+                      onChange={(e) => setEditModalData({
+                        ...editModalData,
+                        formData: { ...editModalData.formData, companyName: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-address">Address</Label>
+                    <Input
+                      id="edit-address"
+                      value={editModalData.formData.address}
+                      onChange={(e) => setEditModalData({
+                        ...editModalData,
+                        formData: { ...editModalData.formData, address: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-typeOfWork">Type of Work</Label>
+                    <Select
+                      value={editModalData.formData.typeOfWork}
+                      onValueChange={(value) => setEditModalData({
+                        ...editModalData,
+                        formData: { ...editModalData.formData, typeOfWork: value as "WebDev" | "DigitalMarketing" }
+                      })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type of work" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="WebDev">Web Development</SelectItem>
+                        <SelectItem value="DigitalMarketing">Digital Marketing</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setEditModalData({
+                      isOpen: false,
+                      leadId: null,
+                      formData: {
+                        name: "",
+                        phone: "",
+                        email: "",
+                        companyName: "",
+                        address: "",
+                        typeOfWork: "WebDev",
+                      }
+                    })}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">Save Changes</Button>
+                </div>
+              </form>
             </CardContent>
           </Card>
         </div>

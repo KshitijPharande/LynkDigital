@@ -73,4 +73,28 @@ exports.updateCall = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
+};
+
+exports.updateLead = async (req, res) => {
+  try {
+    const { name, phone, email, companyName, address, typeOfWork } = req.body;
+    const lead = await Lead.findById(req.params.id);
+    if (!lead) return res.status(404).json({ message: 'Lead not found' });
+    
+    if (lead.status !== 'pending') {
+      return res.status(400).json({ message: 'Can only edit pending leads' });
+    }
+
+    lead.name = name;
+    lead.phone = phone;
+    lead.email = email;
+    lead.companyName = companyName;
+    lead.address = address;
+    lead.typeOfWork = typeOfWork;
+    
+    await lead.save();
+    res.json(lead);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
 }; 

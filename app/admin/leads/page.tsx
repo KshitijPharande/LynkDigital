@@ -185,7 +185,7 @@ export default function LeadsPage() {
 
   const handleReject = async (id: string) => {
     try {
-      const response = await axiosInstance.post(`/api/leads/${id}/reject`);
+      const response = await axiosInstance.put(`/api/leads/${id}/reject`);
       if (response.data) {
         toast.success("Lead rejected", { position: "top-right" });
         fetchLeads();
